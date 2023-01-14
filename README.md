@@ -12,9 +12,9 @@ Following minimax game can be summarized by value function $V(D,G)$:
 
 $\min\limits_{G} \max\limits_{D} V(D,G)=\mathbb{E}_{x \sim p_{data}(\mathbf{x})}[logD(\mathbf{x})] + \mathbb{E}_{\mathbf{z} \sim p_{\mathbf{z}}(\mathbf{z})}[log(1 - D(G(\mathbf{z})))]$
 
-where: (TODO: check if those descriptions make sense)
+where:
 
-$p_{data}(\mathbf{x})$ - original data's distribution over x; 
+$p_{data}(\mathbf{x})$ - distribution of original dataset; 
 
 $p_{\mathbf{z}}(\mathbf{z})$ -  distribution on input noise variables.
 
