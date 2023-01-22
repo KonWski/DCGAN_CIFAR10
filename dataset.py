@@ -23,7 +23,7 @@ class CIFAR10GAN(CIFAR10):
         state: str
             train or test
         '''
-        super().__init__(root, train, download)
+        super().__init__(root = root, train = train, download = download)
         self.class_name = class_name
         self.class_id = self.class_to_idx[self.class_name]
         self.data, self.target = self._filter_by_class_name()
