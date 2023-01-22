@@ -1,4 +1,6 @@
 from torch import nn, Tensor
+from torch.nn import Linear
+from torch.nn.functional import relu, sigmoid
 
 class GeneratorCIFAR10(nn.Module):
     '''
@@ -13,18 +15,18 @@ class GeneratorCIFAR10(nn.Module):
 
         super().__init__()
         self.latent_vector_length = latent_vector_length
-        self.linear1 = nn.Linear(self.latent_vector_length, 768)
-        self.linear2 = nn.Linear(768, 1536)
-        self.linear3 = nn.Linear(1536, 2304)
-        self.linear4 = nn.Linear(2304, 3072)
+        self.linear1 = Linear(self.latent_vector_length, 768)
+        self.linear2 = Linear(768, 1536)
+        self.linear3 = Linear(1536, 2304)
+        self.linear4 = Linear(2304, 3072)
 
 
     def forward(self, x: Tensor):
 
-        x = nn.ReLU(self.linear1(x))
-        x = nn.Sigmoid(self.linear2(x))
-        x = nn.ReLU(self.linear3(x))
-        x = nn.Sigmoid(self.linear4(x))
+        x = relu(self.linear1(x))
+        x = sigmoid(self.linear2(x))
+        x = relu(self.linear3(x))
+        x = sigmoid(self.linear4(x))
         x = x.view(32, 32, 3)
 
         return x
