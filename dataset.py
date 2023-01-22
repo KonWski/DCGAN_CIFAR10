@@ -1,4 +1,5 @@
 from torchvision.datasets import CIFAR10
+from torchvision.transforms import ToTensor
 
 class CIFAR10GAN(CIFAR10):
 
@@ -23,7 +24,7 @@ class CIFAR10GAN(CIFAR10):
         state: str
             train or test
         '''
-        super().__init__(root = root, train = train, download = download)
+        super().__init__(root = root, train = train, transform = ToTensor(), download = download)
         self.class_name = class_name
         self.class_id = self.class_to_idx[self.class_name]
         self.data, self.targets = self._filter_by_class_name()
