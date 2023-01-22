@@ -35,7 +35,7 @@ class CIFAR10GAN(CIFAR10):
         '''
 
         # find elements index for class name
-        elements_indices = [index for index, id in enumerate(self.target) if id == self.class_id]
+        elements_indices = [index for index, id in enumerate(self.targets) if id == self.class_id]
 
         # limit data and target
         data = [self.data[index] for index in elements_indices]
