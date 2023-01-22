@@ -26,7 +26,7 @@ class CIFAR10GAN(CIFAR10):
         super().__init__(root = root, train = train, download = download)
         self.class_name = class_name
         self.class_id = self.class_to_idx[self.class_name]
-        self.data, self.target = self._filter_by_class_name()
+        self.data, self.targets = self._filter_by_class_name()
 
 
     def _filter_by_class_name(self):
@@ -39,6 +39,6 @@ class CIFAR10GAN(CIFAR10):
 
         # limit data and target
         data = [self.data[index] for index in elements_indices]
-        target = [self.target[index] for index in elements_indices]
+        targets = [self.targets[index] for index in elements_indices]
         
-        return data, target
+        return data, targets
