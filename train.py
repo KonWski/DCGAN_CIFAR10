@@ -107,22 +107,23 @@ def train_model(
             labels_real_images = labels_real_images.to(device)
             labels_fake_images = labels_fake_images.to(device)
 
+            # generate images using random noise
             noise = noise.to(device)
             generated_images = generator(noise)
-            print(f"generated images shape: {generated_images.shape}")
-            print(f"real_images shape: {real_images.shape}")
 
+            # classify real and fake images
             classified_real_images = discriminator(real_images)
             classified_generated_images = discriminator(generated_images)
 
-            # part_0
+            # calculate loss_0
             loss_0 = criterion(classified_real_images, labels_real_images)
             loss_0.backward()
 
-            # part_1, second use of backward sums all gradients
+            # calculate loss_1, second use of backward sums all gradients
             loss_1 = criterion(classified_generated_images, labels_fake_images)
             loss_1.backward()
 
+            # update discriminator's weights
             loss_discriminator = loss_0 + loss_1
             optimizer_discriminator.step()
 
@@ -146,4 +147,4 @@ def train_model(
         epoch_loss_discriminator = round(running_loss_discriminator / len_dataset, 2)
         epoch_loss_generator = round(running_loss_generator / len_dataset, 2)
 
-        logging.info(f"Epoch: {epoch}, loss_disciminator: {epoch_loss_discriminator}, loss_generator: {epoch_loss_generator}")
+        logging.info(f"Epoch: {epoch}, loss_discriminator: {epoch_loss_discriminator}, loss_generator: {epoch_loss_generator}")
