@@ -99,8 +99,8 @@ def train_model(
             # labels
             tensor_zeros = torch.full((batch_size, 1), 0)
             tensor_ones = torch.full((batch_size, 1), 1)
-            labels_real_images = torch.cat((tensor_zeros, tensor_ones), dim=1)
-            labels_fake_images = torch.cat((tensor_ones, tensor_zeros), dim=1)
+            labels_real_images = torch.cat((tensor_zeros, tensor_ones), dim=1, dtype=torch.float)
+            labels_fake_images = torch.cat((tensor_ones, tensor_zeros), dim=1, dtype=torch.float)
 
             # send tensors to device
             real_images = real_images.to(device)
