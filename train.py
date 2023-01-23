@@ -110,6 +110,8 @@ def train_model(
             classified_real_images = discriminator(real_images)
 
             # part_0
+            print(f"classified_real_images shape: {classified_real_images.shape}")
+            print(f"labels_real_images: {labels_real_images.shape}")
             loss_0 = criterion(classified_real_images, labels_real_images)
             loss_0.backward()
 
