@@ -108,6 +108,7 @@ def train_model(
 
             generated_images = generator(noise)
             classified_real_images = discriminator(real_images)
+            classified_real_images = classified_real_images.view(-1)
 
             # part_0
             print(f"classified_real_images shape: {classified_real_images.shape}")
