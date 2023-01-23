@@ -24,14 +24,10 @@ class GeneratorCIFAR10(nn.Module):
     def forward(self, x: Tensor):
 
         x = relu(self.linear1(x))
-        print(f"x shape: {x.shape}")
         x = sigmoid(self.linear2(x))
-        print(f"x shape: {x.shape}")
         x = relu(self.linear3(x))
-        print(f"x shape: {x.shape}")
         x = sigmoid(self.linear4(x))
-        print(f"x shape: {x.shape}")
-        x = x.view(32, 32, 3)
+        x = x.view(-1, 32, 32, 3)
 
         return x
 
