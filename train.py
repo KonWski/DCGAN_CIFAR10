@@ -97,8 +97,10 @@ def train_model(
             noise = torch.rand(batch_size, latent_vector_length)
 
             # labels
-            labels_real_images = torch.full((batch_size,), 1)
-            labels_fake_images = torch.full((batch_size,), 0)
+            tensor_zeros = torch.full((batch_size,), 0)
+            tensor_ones = torch.full((batch_size,), 1)
+            labels_real_images = torch.cat((tensor_zeros, tensor_ones), dim=1)
+            labels_fake_images = torch.cat((tensor_ones, tensor_zeros), dim=1)
 
             # send tensors to device
             real_images = real_images.to(device)
@@ -108,7 +110,7 @@ def train_model(
 
             generated_images = generator(noise)
             classified_real_images = discriminator(real_images)
-            classified_real_images = classified_real_images.view(-1)
+            classified_real_images = classified_real_images
 
             # part_0
             print(f"classified_real_images shape: {classified_real_images.shape}")
