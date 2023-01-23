@@ -1,5 +1,5 @@
 from torch import nn, Tensor
-from torch.nn import Linear
+from torch.nn import Linear, Dropout, Conv2d, Softmax, Flatten
 from torch.nn.functional import relu, sigmoid
 
 class GeneratorCIFAR10(nn.Module):
@@ -42,22 +42,23 @@ class DiscriminatorCIFAR10(nn.Module):
     def __init__(self):
 
         super().__init__()
-        self.conv1 = nn.Conv2d(3, 6, 3)
-        self.dropout = nn.Dropout2d(p=0.2)
-        self.conv2 = nn.Conv2d(6, 12, 6)
-        self.flatten = nn.Flatten()
-        self.linear1 = nn.Linear(7500, 1000)
-        self.linear2 = nn.Linear(1000, 100)
-        self.linear3 = nn.Linear(100, 2)        
+        self.conv1 = Conv2d(3, 6, 3)
+        self.dropout = Dropout(p=0.2)
+        self.conv2 = Conv2d(6, 12, 6)
+        self.flatten = Flatten()
+        self.linear1 = Linear(7500, 1000)
+        self.linear2 = Linear(1000, 100)
+        self.linear3 = Linear(100, 2)        
 
     def forward(self, x: Tensor):
         
-        x = nn.ReLU(self.conv1(x))
+        x = relu(self.conv1(x))
         x = self.dropout(x)
-        x = nn.Relu(self.conv2(x))
-        x = nn.Relu(self.linear1(x))
-        x = nn.Relu(self.linear2(x))
-        x = nn.Relu(self.linear3(x))
-        x = nn.Softmax(x)
+        x = relu(self.conv2(x))
+        x = self.flatten(x)
+        x = relu(self.linear1(x))
+        x = relu(self.linear2(x))
+        x = relu(self.linear3(x))
+        x = Softmax(x)
 
         return x
