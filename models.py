@@ -1,6 +1,6 @@
 from torch import nn, Tensor
-from torch.nn import Linear, Dropout, Conv2d, Softmax, Flatten
-from torch.nn.functional import relu, sigmoid
+from torch.nn import Linear, Dropout, Conv2d, Flatten
+from torch.nn.functional import relu, sigmoid, softmax
 
 class GeneratorCIFAR10(nn.Module):
     '''
@@ -59,6 +59,6 @@ class DiscriminatorCIFAR10(nn.Module):
         x = relu(self.linear1(x))
         x = relu(self.linear2(x))
         x = relu(self.linear3(x))
-        x = Softmax(x)
+        x = softmax(x)
 
         return x
