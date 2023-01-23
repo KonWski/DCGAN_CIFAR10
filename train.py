@@ -104,13 +104,13 @@ def train_model(
 
             # send tensors to device
             real_images = real_images.to(device)
-            noise = noise.to(device)
             labels_real_images = labels_real_images.to(device)
             labels_fake_images = labels_fake_images.to(device)
 
+            noise = noise.to(device)
             generated_images = generator(noise)
             classified_real_images = discriminator(real_images)
-            classified_real_images = classified_real_images
+            classified_generated_images = discriminator(generated_images)
 
             # part_0
             print(f"classified_real_images shape: {classified_real_images.shape}")
@@ -119,7 +119,7 @@ def train_model(
             loss_0.backward()
 
             # part_1, second use of backward sums all gradients
-            loss_1 = criterion(generated_images, labels_fake_images)
+            loss_1 = criterion(classified_generated_images, labels_fake_images)
             loss_1.backward()
 
             loss_discriminator = loss_0 + loss_1
