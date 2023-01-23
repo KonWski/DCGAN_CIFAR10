@@ -110,6 +110,8 @@ def train_model(
             noise = noise.to(device)
             generated_images = generator(noise)
             print(f"generated images shape: {generated_images.shape}")
+            print(f"real_images shape: {real_images.shape}")
+
             classified_real_images = discriminator(real_images)
             classified_generated_images = discriminator(generated_images)
 
