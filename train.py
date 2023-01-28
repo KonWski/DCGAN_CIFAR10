@@ -138,6 +138,8 @@ def train_model(
 
             generated_images = generator(noise)
             classified_generated_images = discriminator(generated_images)
+            print(f"classified_generated_images: {classified_generated_images}")
+            print(f"labels_fake_images: {labels_fake_images}")
             loss_generator = criterion(classified_generated_images, labels_fake_images)
 
             loss_generator.backward()
@@ -155,6 +157,7 @@ def train_model(
         if epoch_loss_generator < lowest_epoch_loss_generator:
             
             checkpoint = {
+                "model_state_dict": generator.state_dict(),
                 "latent_vector_length": latent_vector_length,
                 "class_name": class_name,
                 "epoch": epoch,
