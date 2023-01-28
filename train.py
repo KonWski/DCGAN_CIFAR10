@@ -1,9 +1,10 @@
 from dataset import CIFAR10GAN
 import torch
-from models import DiscriminatorCIFAR10, GeneratorCIFAR10
+from models import DiscriminatorCIFAR10, GeneratorCIFAR10, save_checkpoint
 from torch.optim import Adam
 from torch.nn import BCELoss
 import logging
+from datetime import datetime
 
 def train_model(
         device, 
@@ -79,6 +80,9 @@ def train_model(
     # criterion
     criterion = BCELoss()
 
+    # lowest losses for both models
+    lowest_epoch_loss_generator = float("inf")
+
     for epoch in range(n_epochs):
 
         for id, batch in enumerate(loader, 0):
@@ -146,5 +150,19 @@ def train_model(
         # epoch statistics
         epoch_loss_discriminator = round(running_loss_discriminator / len_dataset, 2)
         epoch_loss_generator = round(running_loss_generator / len_dataset, 2)
+
+        # save generator checkpoint
+        if epoch_loss_generator < lowest_epoch_loss_generator:
+            
+            checkpoint = {
+                "latent_vector_length": latent_vector_length,
+                "class_name": class_name,
+                "epoch": epoch,
+                "epoch_loss": epoch_loss_generator,
+                "save_dttm": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+
+            checkpoint_path = f"{checkpoints_dir}/GeneratorCIFAR10"
+            save_checkpoint(checkpoint, checkpoint_path)
 
         logging.info(f"Epoch: {epoch}, loss_discriminator: {epoch_loss_discriminator}, loss_generator: {epoch_loss_generator}")

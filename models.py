@@ -1,6 +1,7 @@
-from torch import nn, Tensor
+from torch import nn, Tensor, save, load
 from torch.nn import Linear, Dropout, Conv2d, Flatten
 from torch.nn.functional import relu, sigmoid, softmax
+import logging
 
 class GeneratorCIFAR10(nn.Module):
     '''
@@ -62,3 +63,55 @@ class DiscriminatorCIFAR10(nn.Module):
         x = softmax(x)
 
         return x
+
+
+def save_checkpoint(checkpoint: dict, checkpoint_path: str):
+    '''
+    saves checkpoint on given checkpoint_path
+    '''
+    save(checkpoint, checkpoint_path)
+
+    logging.info(8*"-")
+    logging.info(f"Saved model to checkpoint: {checkpoint_path}")
+    logging.info(f"Epoch: {checkpoint['epoch']}")
+    logging.info(8*"-")
+
+
+def load_checkpoint(checkpoint_path: str):
+    '''
+    loads model checkpoint from given path
+
+    Parameters
+    ----------
+    checkpoint_path : str
+        Path to checkpoint
+
+    Notes
+    -----
+    checkpoint: dict
+                parameters retrieved from training process i.e.:
+                - model_state_dict
+                - last finished number of epoch
+                - save time
+                - class_name
+                - loss from saved epoch
+                
+    '''
+    checkpoint = load(checkpoint_path)
+    latent_vector_length = checkpoint["latent_vector_length"]
+
+    # initiate model
+    model = GeneratorCIFAR10(latent_vector_length)
+
+    # load parameters from checkpoint
+    model.load_state_dict(checkpoint["model_state_dict"])
+
+    # print loaded parameters
+    logging.info(f"Loaded model from checkpoint: {checkpoint_path}")
+    logging.info(f"Class name: {checkpoint['class_name']}")
+    logging.info(f"Epoch: {checkpoint['epoch']}")
+    logging.info(f"Loss: {checkpoint['epoch_loss']}")
+    logging.info(f"Save dttm: {checkpoint['save_dttm']}")
+    logging.info(8*"-")
+
+    return model, checkpoint
