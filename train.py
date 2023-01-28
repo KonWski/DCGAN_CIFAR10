@@ -147,6 +147,7 @@ def train_model(
             loss_generator = criterion(classified_generated_images, labels_fake_images)
             print(f"loss generator: {loss_generator.item()}")
             loss_generator.backward()
+            print(f"loss generator after backward: {loss_generator.item()}")
             optimizer_generator.step()
 
             # iteration statistics
