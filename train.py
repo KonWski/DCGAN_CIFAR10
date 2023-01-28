@@ -149,12 +149,11 @@ def train_model(
             # iteration statistics
             running_loss_discriminator += loss_discriminator.item()
             running_loss_generator += loss_generator.item()
+            print(f"running_loss_generator: {running_loss_generator}")
 
         # epoch statistics
         epoch_loss_discriminator = round(running_loss_discriminator / len_dataset, 2)
         epoch_loss_generator = round(running_loss_generator / len_dataset, 2)
-        print(f"running_loss_generator: {running_loss_generator}")
-        print(f"epoch_loss_generator: {epoch_loss_generator}")
 
         # save generator checkpoint
         if epoch_loss_generator < lowest_epoch_loss_generator:
