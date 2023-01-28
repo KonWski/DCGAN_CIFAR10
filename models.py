@@ -73,7 +73,6 @@ def save_checkpoint(checkpoint: dict, checkpoint_path: str):
 
     logging.info(8*"-")
     logging.info(f"Saved model to checkpoint: {checkpoint_path}")
-    logging.info(f"Epoch: {checkpoint['epoch']}")
     logging.info(8*"-")
 
 
