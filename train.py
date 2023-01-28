@@ -120,10 +120,14 @@ def train_model(
             classified_generated_images = discriminator(generated_images)
 
             # calculate loss_0
+            print(f"classified_real_images: {classified_real_images}")
+            print(f"labels_real_images: {labels_real_images}")
             loss_0 = criterion(classified_real_images, labels_real_images)
             loss_0.backward()
 
             # calculate loss_1, second use of backward sums all gradients
+            print(f"classified_generated_images: {classified_generated_images}")
+            print(f"labels_fake_images: {labels_fake_images}")
             loss_1 = criterion(classified_generated_images, labels_fake_images)
             loss_1.backward()
 
