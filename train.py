@@ -149,7 +149,6 @@ def train_model(
             # iteration statistics
             running_loss_discriminator += loss_discriminator.item()
             running_loss_generator += loss_generator.item()
-            print(f"running_loss_generator: {running_loss_generator}")
 
         # epoch statistics
         epoch_loss_discriminator = round(running_loss_discriminator / len_dataset, 2)
