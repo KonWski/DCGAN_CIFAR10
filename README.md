@@ -10,7 +10,7 @@ Both framework's parts learn synchronically during training process during which
 
 Following minimax game can be summarized by value function $V(D,G)$:
 
-$=\mathbb{E}_{x \sim p_{data}(\mathbf{x})}[logD(\mathbf{x})] + \mathbb{E}_{\mathbf{z} \sim p_{\mathbf{z}}(\mathbf{z})}[log(1 - D(G(\mathbf{z})))]$
+$\min\limits_{G} \max\limits_{D} V(D,G) = $
 
 where:
 
