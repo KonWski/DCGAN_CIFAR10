@@ -130,8 +130,8 @@ def train_model(
             loss_1 = criterion(classified_generated_images, labels_fake_images)
 
             # update discriminator's weights
-            loss_discriminator = loss_0 + loss_1
-            loss_discriminator.backward()
+            loss_discriminator = (loss_0 + loss_1) / 2
+            loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
 
             ##########################
@@ -139,7 +139,7 @@ def train_model(
             ##########################
             optimizer_generator.zero_grad()
 
-            generated_images = generator(noise)
+            # generated_images = generator(noise)
             classified_generated_images = discriminator(generated_images)
             loss_generator = criterion(classified_generated_images, labels_fake_images)
             loss_generator.backward()
