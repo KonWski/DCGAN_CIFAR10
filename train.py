@@ -117,7 +117,7 @@ def train_model(
 
             # classify real and fake images
             classified_real_images = discriminator(real_images)
-            classified_generated_images = discriminator(generated_images)
+            classified_generated_images = discriminator(generated_images.detach())
 
             # calculate loss_0
             # print(f"classified_real_images: {classified_real_images}")
@@ -140,7 +140,7 @@ def train_model(
             ##########################
             optimizer_generator.zero_grad()
 
-            # generated_images = generator(noise)
+            generated_images = generator(noise)
             classified_generated_images = discriminator(generated_images)
             loss_generator = criterion(classified_generated_images, labels_fake_images)
             loss_generator.backward()
