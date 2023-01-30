@@ -140,7 +140,7 @@ def train_model(
             ##########################
             optimizer_generator.zero_grad()
 
-            generated_images = generator(noise)
+            # generated_images = generator(noise)
             classified_generated_images = discriminator(generated_images)
             loss_generator = criterion(classified_generated_images, labels_fake_images)
             loss_generator.backward()
