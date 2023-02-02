@@ -149,12 +149,12 @@ def train_model(
             loss_discriminator = (loss_0 + loss_1) / 2
             print(f"loss_discriminator: {loss_discriminator}")
             print(f"Example weights before step: {discriminator.linear1.weight[0][0]}")
-            print(f"Example grad before step {discriminator.linear1.weight.grad[0][0]}")
+            print(f"Example grad before step {discriminator.linear1.weight.grad[0]}")
             # w0_linear1 = discriminator.linear1.weight
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
             print(f"Example weights after step: {discriminator.linear1.weight[0][0]}")
-            print(f"Example grad after step {discriminator.linear1.weight.grad[0][0]}")
+            print(f"Example grad after step {discriminator.linear1.weight.grad[0]}")
             # w1_linear1 = discriminator.linear1.weight
 
             # print(f"Are weights the same: {torch.all(torch.eq(w0_linear1, w1_linear1))}")
