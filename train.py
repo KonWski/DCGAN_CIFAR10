@@ -74,6 +74,9 @@ def train_model(
     generator = GeneratorCIFAR10(latent_vector_length).to(device)
     discriminator = DiscriminatorCIFAR10().to(device)
 
+    print(f"generator.training: {generator.training}")
+    print(f"discriminator.training: {discriminator.training}")
+
     # optimizers
     optimizer_discriminator = Adam(discriminator.parameters(), lr=3e-4)
     optimizer_generator = Adam(generator.parameters(), lr=3e-4)
@@ -143,10 +146,10 @@ def train_model(
             loss_discriminator = (loss_0 + loss_1) / 2
             optimizer_discriminator.zero_grad()
             print(f"loss_discriminator: {loss_discriminator}")
-            w0_linear1 = discriminator.linear1.weight
+            w0_linear1 = discriminator.linear1.weight.copy()
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
-            w1_linear1 = discriminator.linear1.weight
+            w1_linear1 = discriminator.linear1.weight.copy()
 
             print(f"Are weights the same: {torch.all(torch.eq(w0_linear1, w1_linear1))}")
             ##########################
