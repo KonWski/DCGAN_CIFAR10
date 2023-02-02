@@ -146,12 +146,14 @@ def train_model(
             loss_discriminator = (loss_0 + loss_1) / 2
             optimizer_discriminator.zero_grad()
             print(f"loss_discriminator: {loss_discriminator}")
-            w0_linear1 = discriminator.linear1.weight.copy()
+            print(f"Example weights before step: {discriminator.linear1.weight[0]}")
+            # w0_linear1 = discriminator.linear1.weight
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
-            w1_linear1 = discriminator.linear1.weight.copy()
+            print(f"Example weights after step: {discriminator.linear1.weight[0]}")
+            # w1_linear1 = discriminator.linear1.weight
 
-            print(f"Are weights the same: {torch.all(torch.eq(w0_linear1, w1_linear1))}")
+            # print(f"Are weights the same: {torch.all(torch.eq(w0_linear1, w1_linear1))}")
             ##########################
             # Generator's training
             ##########################
