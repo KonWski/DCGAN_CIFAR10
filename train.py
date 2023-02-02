@@ -70,8 +70,8 @@ def train_model(
     len_dataset = len(dataset)
 
     # models
-    generator = GeneratorCIFAR10(latent_vector_length)
-    discriminator = DiscriminatorCIFAR10()
+    generator = GeneratorCIFAR10(latent_vector_length).to(device)
+    discriminator = DiscriminatorCIFAR10().to(device)
 
     # optimizers
     optimizer_discriminator = Adam(discriminator.parameters(), lr=1e-5)
