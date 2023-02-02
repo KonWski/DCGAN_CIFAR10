@@ -127,30 +127,32 @@ def train_model(
 
             # calculate loss_0
             loss_0 = criterion(classified_real_images, labels_real_images)
-            print(f"classified_real_images shape: {classified_real_images.shape}")
-            print(8*"-")
-            print(f"classified_real_images: {classified_real_images}")
-            print(8*"*")
-            print(f"labels_real_images shape: {labels_real_images.shape}")
-            print(8*"-")
-            print(f"labels_real_images: {labels_real_images}")
+            # print(f"classified_real_images shape: {classified_real_images.shape}")
+            # print(8*"-")
+            # print(f"classified_real_images: {classified_real_images}")
+            # print(8*"*")
+            # print(f"labels_real_images shape: {labels_real_images.shape}")
+            # print(8*"-")
+            # print(f"labels_real_images: {labels_real_images}")
             running_corrects_real += torch.sum(torch.argmax(classified_real_images, 1) == torch.argmax(labels_real_images, 1)).item()
             print(f"running_corrects_real: {running_corrects_real}")
 
             # calculate loss_1, second use of backward sums all gradients
             loss_1 = criterion(classified_generated_images, labels_fake_images)
             running_corrects_fake += torch.sum(torch.argmax(classified_generated_images, 1) == torch.argmax(labels_fake_images, 1)).item()
-            print(f"running_corrects_fake: {running_corrects_fake}")
+            # print(f"running_corrects_fake: {running_corrects_fake}")
 
             # update discriminator's weights
             loss_discriminator = (loss_0 + loss_1) / 2
             optimizer_discriminator.zero_grad()
             print(f"loss_discriminator: {loss_discriminator}")
-            print(f"Example weights before step: {discriminator.linear2.weight[0]}")
+            print(f"Example weights before step: {discriminator.linear1.weight[0][0]}")
+            print(f"Example grad before step {discriminator.linear1.weight.grad}")
             # w0_linear1 = discriminator.linear1.weight
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
-            print(f"Example weights after step: {discriminator.linear2.weight[0]}")
+            print(f"Example weights after step: {discriminator.linear1.weight[0][0]}")
+            print(f"Example grad after step {discriminator.linear1.weight.grad}")
             # w1_linear1 = discriminator.linear1.weight
 
             # print(f"Are weights the same: {torch.all(torch.eq(w0_linear1, w1_linear1))}")
