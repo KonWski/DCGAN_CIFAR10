@@ -142,9 +142,13 @@ def train_model(
 
             # update discriminator's weights
             loss_discriminator = (loss_0 + loss_1) / 2
+            print(f"loss_discriminator: {loss_discriminator}")
+            w0_linear1 = discriminator.linear1.weight
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
+            w1_linear1 = discriminator.linear1.weight
 
+            print(f"Are weights the same: {w0_linear1 == w1_linear1}")
             ##########################
             # Generator's training
             ##########################
