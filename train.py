@@ -148,7 +148,7 @@ def train_model(
             optimizer_discriminator.step()
             w1_linear1 = discriminator.linear1.weight
 
-            print(f"Are weights the same: {torch.eq(w0_linear1, w1_linear1)}")
+            print(f"Are weights the same: {torch.all(torch.eq(w0_linear1, w1_linear1))}")
             ##########################
             # Generator's training
             ##########################
