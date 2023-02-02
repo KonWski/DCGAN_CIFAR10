@@ -97,7 +97,6 @@ def train_model(
             ##########################
             # Discriminator's training
             ##########################
-            optimizer_discriminator.zero_grad()
 
             # inputs for discriminator and generator
             real_images = batch[0]
@@ -142,6 +141,7 @@ def train_model(
 
             # update discriminator's weights
             loss_discriminator = (loss_0 + loss_1) / 2
+            optimizer_discriminator.zero_grad()
             print(f"loss_discriminator: {loss_discriminator}")
             w0_linear1 = discriminator.linear1.weight
             loss_discriminator.backward(retain_graph = True)
