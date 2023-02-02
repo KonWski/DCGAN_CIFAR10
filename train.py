@@ -101,11 +101,12 @@ def train_model(
 
             # inputs for discriminator and generator
             real_images = batch[0]
-            noise = torch.rand(batch_size, latent_vector_length)
+            real_images_size = real_images.shape[0]
+            noise = torch.rand(real_images_size, latent_vector_length)
 
             # labels
-            tensor_zeros = torch.full((batch_size, 1), 0, dtype=torch.float)
-            tensor_ones = torch.full((batch_size, 1), 1, dtype=torch.float)
+            tensor_zeros = torch.full((real_images_size, 1), 0, dtype=torch.float)
+            tensor_ones = torch.full((real_images_size, 1), 1, dtype=torch.float)
             labels_real_images = torch.cat((tensor_zeros, tensor_ones), dim=1)
             labels_fake_images = torch.cat((tensor_ones, tensor_zeros), dim=1)
 
@@ -123,9 +124,6 @@ def train_model(
             classified_generated_images = discriminator(generated_images)
 
             # calculate loss_0
-            print(f"labels_real_images shape: {labels_real_images.shape}")
-            print(f"classified_real_images: {classified_real_images}")
-
             loss_0 = criterion(classified_real_images, labels_real_images)
             # print(f"classified_real_images shape: {classified_real_images.shape}")
             # print(8*"-")
