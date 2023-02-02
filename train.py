@@ -74,8 +74,8 @@ def train_model(
     discriminator = DiscriminatorCIFAR10().to(device)
 
     # optimizers
-    optimizer_discriminator = Adam(discriminator.parameters(), lr=1e-5)
-    optimizer_generator = Adam(generator.parameters(), lr=1e-5)
+    optimizer_discriminator = Adam(discriminator.parameters(), lr=3e-4)
+    optimizer_generator = Adam(generator.parameters(), lr=3e-4)
     
     # criterion
     criterion = BCELoss()
