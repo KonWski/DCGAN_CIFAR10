@@ -123,6 +123,9 @@ def train_model(
 
             # calculate loss_0
             loss_0 = criterion(classified_real_images, labels_real_images)
+            print(f"classified_real_images shape: {classified_real_images.shape}")
+            print(8*"-")
+            print(f"classified_real_images: {classified_real_images}")            
             running_corrects_real += torch.sum(torch.argmax(classified_real_images) == torch.argmax(labels_real_images)).item()
 
             # calculate loss_1, second use of backward sums all gradients
