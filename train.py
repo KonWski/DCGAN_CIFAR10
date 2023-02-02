@@ -111,6 +111,9 @@ def train_model(
             tensor_ones = torch.full((real_images_size, 1), 1, dtype=torch.float)
             labels_real_images = torch.cat((tensor_zeros, tensor_ones), dim=1).to(device)
             labels_fake_images = torch.cat((tensor_ones, tensor_zeros), dim=1).to(device)
+            
+            # zero grad
+            optimizer_discriminator.zero_grad()
 
             # send tensors to device
             real_images = real_images.to(device)
@@ -144,15 +147,14 @@ def train_model(
 
             # update discriminator's weights
             loss_discriminator = (loss_0 + loss_1) / 2
-            optimizer_discriminator.zero_grad()
             print(f"loss_discriminator: {loss_discriminator}")
             print(f"Example weights before step: {discriminator.linear1.weight[0][0]}")
-            print(f"Example grad before step {discriminator.linear1.weight.grad}")
+            print(f"Example grad before step {discriminator.linear1.weight.grad[0][0]}")
             # w0_linear1 = discriminator.linear1.weight
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
             print(f"Example weights after step: {discriminator.linear1.weight[0][0]}")
-            print(f"Example grad after step {discriminator.linear1.weight.grad}")
+            print(f"Example grad after step {discriminator.linear1.weight.grad[0][0]}")
             # w1_linear1 = discriminator.linear1.weight
 
             # print(f"Are weights the same: {torch.all(torch.eq(w0_linear1, w1_linear1))}")
