@@ -123,6 +123,9 @@ def train_model(
             classified_generated_images = discriminator(generated_images)
 
             # calculate loss_0
+            print(f"labels_real_images shape: {labels_real_images.shape}")
+            print(f"classified_real_images: {classified_real_images}")
+
             loss_0 = criterion(classified_real_images, labels_real_images)
             # print(f"classified_real_images shape: {classified_real_images.shape}")
             # print(8*"-")
