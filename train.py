@@ -68,6 +68,7 @@ def train_model(
 
     # number of observations
     len_dataset = len(dataset)
+    print(f"len_dataset: {len_dataset}")
 
     # models
     generator = GeneratorCIFAR10(latent_vector_length).to(device)
