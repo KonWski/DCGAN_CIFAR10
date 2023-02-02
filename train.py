@@ -150,8 +150,8 @@ def train_model(
             running_loss_generator += loss_generator.item()
 
         # epoch statistics
-        epoch_loss_discriminator = round(running_loss_discriminator / len_dataset, 6)
-        epoch_loss_generator = round(running_loss_generator / len_dataset, 6)
+        epoch_loss_discriminator = running_loss_discriminator / len_dataset
+        epoch_loss_generator = running_loss_generator / len_dataset
 
         # save generator checkpoint
         if epoch_loss_generator < lowest_epoch_loss_generator:
