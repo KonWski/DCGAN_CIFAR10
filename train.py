@@ -130,7 +130,7 @@ def train_model(
             loss_1 = criterion(classified_generated_images, labels_fake_images)
 
             # update discriminator's weights
-            loss_discriminator = (loss_0 + loss_1) / 2
+            loss_discriminator = loss_0 + loss_1
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
 
@@ -150,8 +150,8 @@ def train_model(
             running_loss_generator += loss_generator.item()
 
         # epoch statistics
-        epoch_loss_discriminator = running_loss_discriminator / len_dataset
-        epoch_loss_generator = running_loss_generator / len_dataset
+        epoch_loss_discriminator = round(running_loss_discriminator / len_dataset, 6)
+        epoch_loss_generator = round(running_loss_generator / len_dataset, 6)
 
         # save generator checkpoint
         if epoch_loss_generator < lowest_epoch_loss_generator:
