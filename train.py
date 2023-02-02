@@ -90,6 +90,8 @@ def train_model(
             # calculated parameters
             running_loss_discriminator = 0.0
             running_loss_generator = 0.0
+            running_corrects_real = 0
+            running_corrects_fake = 0
 
             ##########################
             # Discriminator's training
@@ -120,14 +122,12 @@ def train_model(
             classified_generated_images = discriminator(generated_images)
 
             # calculate loss_0
-            # print(f"classified_real_images: {classified_real_images}")
-            # print(f"labels_real_images: {labels_real_images}")
             loss_0 = criterion(classified_real_images, labels_real_images)
+            running_corrects_real += torch.sum(torch.argmax(classified_real_images) == torch.argmax(labels_real_images)).item()
 
             # calculate loss_1, second use of backward sums all gradients
-            # print(f"classified_generated_images: {classified_generated_images}")
-            # print(f"labels_fake_images: {labels_fake_images}")
             loss_1 = criterion(classified_generated_images, labels_fake_images)
+            running_corrects_fake += torch.sum(torch.argmax(classified_generated_images) == torch.argmax(labels_fake_images)).item()
 
             # update discriminator's weights
             loss_discriminator = (loss_0 + loss_1) / 2
@@ -152,6 +152,8 @@ def train_model(
         # epoch statistics
         epoch_loss_discriminator = running_loss_discriminator / len_dataset
         epoch_loss_generator = running_loss_generator / len_dataset
+        epoch_acc_real = running_corrects_real / len_dataset
+        epoch_acc_fake = running_corrects_fake / len_dataset
 
         # save generator checkpoint
         if epoch_loss_generator < lowest_epoch_loss_generator:
@@ -169,3 +171,4 @@ def train_model(
             save_checkpoint(checkpoint, checkpoint_path)
 
         logging.info(f"Epoch: {epoch}, loss_discriminator: {epoch_loss_discriminator}, loss_generator: {epoch_loss_generator}")
+        logging.info(f"Epoch: {epoch}, epoch_acc_fake: {epoch_acc_fake}, epoch_acc_real: {epoch_acc_real}")
