@@ -72,6 +72,7 @@ class DiscriminatorCIFAR10(nn.Module):
         x = relu(self.linear2(x))
         x = self.dropout(x)
         x = self.linear3(x)
+        x = sigmoid(x)
         return x
 
 
