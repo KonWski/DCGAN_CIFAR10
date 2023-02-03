@@ -1,5 +1,5 @@
 from torch import nn, Tensor, save, load
-from torch.nn import Linear, Dropout, Conv2d, Flatten
+from torch.nn import Linear, Dropout, Conv2d, Flatten, Sequential
 from torch.nn.functional import relu, sigmoid, softmax
 import logging
 from torch.nn.init import xavier_uniform
@@ -19,10 +19,16 @@ class GeneratorCIFAR10(nn.Module):
 
         super().__init__()
         self.latent_vector_length = latent_vector_length
-        self.linear1 = Linear(self.latent_vector_length, 768)
-        self.linear2 = Linear(768, 1536)
-        self.linear3 = Linear(1536, 2304)
-        self.linear4 = Linear(2304, 3072)
+        self.main = Sequential(
+            Linear(self.latent_vector_length, 768),
+            relu(inplace=True),
+            Linear(768, 1536),
+            sigmoid(),
+            Linear(1536, 2304),
+            relu(inplace=True),
+            Linear(2304, 3072),
+            sigmoid()
+        )
 
         if init_randomly_weights:
             self.apply(init_weights_xavier)
@@ -30,10 +36,7 @@ class GeneratorCIFAR10(nn.Module):
 
     def forward(self, x: Tensor):
 
-        x = relu(self.linear1(x))
-        x = sigmoid(self.linear2(x))
-        x = relu(self.linear3(x))
-        x = sigmoid(self.linear4(x))
+        x = self.main(x)
         x = x.view(-1, 3, 32, 32)
 
         return x
