@@ -52,28 +52,24 @@ class DiscriminatorCIFAR10(nn.Module):
     def __init__(self, init_randomly_weights: bool = False):
 
         super().__init__()
-        self.main = Sequential(
-            Conv2d(3, 6, 3),
-            ReLU(inplace=True),
-            Dropout(p=0.2, inplace=True),
-            Conv2d(6, 12, 6),
-            ReLU(inplace=True),
-            Flatten(),
-            Linear(7500, 1000),
-            ReLU(inplace=True),
-            Linear(1000, 100),
-            ReLU(inplace=True),
-            Linear(100, 2),
-            ReLU(inplace=True),
-            Softmax()
-        )
+        self.latent_vector_length = latent_vector_length
+        self.linear1 = Linear(self.latent_vector_length, 768)
+        self.linear2 = Linear(768, 1536)
+        self.linear3 = Linear(1536, 2304)
+        self.linear4 = Linear(2304, 3072)
     
         if init_randomly_weights:
             self.apply(init_weights_xavier)
 
+
     def forward(self, x: Tensor):
         
-        x = self.main(x)
+        x = relu(self.linear1(x))
+        x = sigmoid(self.linear2(x))
+        x = relu(self.linear3(x))
+        x = sigmoid(self.linear4(x))
+        x = x.view(-1, 3, 32, 32)
+
         return x
 
 
@@ -115,7 +111,7 @@ class DiscriminatorCIFAR10(nn.Module):
 
 
 def init_weights_xavier(m):
-    print(m)
+
     if isinstance(m, Linear) or isinstance(m, Conv2d):
         xavier_uniform(m.weight)
 
