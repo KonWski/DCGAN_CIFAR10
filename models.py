@@ -1,5 +1,5 @@
 from torch import nn, Tensor, save, load
-from torch.nn import Linear, Dropout, Conv2d, Flatten, Sequential, ReLU, Sigmoid
+from torch.nn import Linear, Dropout, Conv2d, Flatten, Sequential, ReLU, Sigmoid, Softmax
 from torch.nn.functional import softmax
 import logging
 from torch.nn.init import xavier_uniform
@@ -46,36 +46,42 @@ class DiscriminatorCIFAR10(nn.Module):
     '''
     Returns probability of image being sampled from original training set
 
+    init_randomly_weights: bool
+        init weigts of layers using Xavier weight initialisation
+
     Note:
-    Original Discriminator used MaxOut activation function
+        Original Discriminator used MaxOut activation function
     '''
-    def __init__(self):
+    def __init__(self, init_randomly_weights: bool = False):
 
         super().__init__()
-        self.conv1 = Conv2d(3, 6, 3)
-        self.dropout = Dropout(p=0.2)
-        self.conv2 = Conv2d(6, 12, 6)
-        self.flatten = Flatten()
-        self.linear1 = Linear(7500, 1000)
-        self.linear2 = Linear(1000, 100)
-        self.linear3 = Linear(100, 2)        
+        self.main = Compose(
+            Conv2d(3, 6, 3),
+            ReLU(inplace=True),
+            Dropout(p=0.2, inplace=True),
+            Conv2d(6, 12, 6),
+            ReLU(inplace=True),
+            Flatten(),
+            Linear(7500, 1000),
+            ReLU(inplace=True),
+            Linear(1000, 100),
+            ReLU(inplace=True),
+            Linear(100, 2),
+            ReLU(inplace=True),
+            Softmax()
+        )
+    
+        if init_randomly_weights:
+            self.apply(init_weights_xavier)
 
     def forward(self, x: Tensor):
         
-        x = relu(self.conv1(x))
-        x = self.dropout(x)
-        x = relu(self.conv2(x))
-        x = self.flatten(x)
-        x = relu(self.linear1(x))
-        x = relu(self.linear2(x))
-        x = relu(self.linear3(x))
-        x = softmax(x)
-
+        x = self.main(x)
         return x
 
 
 def init_weights_xavier(m):
-    if isinstance(m, Linear):
+    if isinstance(m, Linear) or isinstance(m, Conv2d):
         xavier_uniform(m.weight)
 
 
