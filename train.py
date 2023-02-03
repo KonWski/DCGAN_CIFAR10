@@ -69,7 +69,7 @@ def train_model(
     ])
 
     # datasets and dataloaders
-    dataset = CIFAR10GAN(f'{root_datasets_dir}/train/', class_name, train=True, transform=transforms_cifar, download=download_datasets)
+    dataset = CIFAR10GAN(f'{root_datasets_dir}/train/', class_name, train=True, transform=transform_cifar, download=download_datasets)
     loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
     # number of observations
