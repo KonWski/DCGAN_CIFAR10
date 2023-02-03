@@ -5,6 +5,7 @@ from torch.optim import Adam
 from torch.nn import BCELoss
 import logging
 from datetime import datetime
+from torchvision import transforms
 
 def train_model(
         device, 
