@@ -1,6 +1,6 @@
 from torch import nn, Tensor, save, load
-from torch.nn import Linear, Dropout, Conv2d, Flatten, Sequential, Relu
-from torch.nn.functional import sigmoid, softmax
+from torch.nn import Linear, Dropout, Conv2d, Flatten, Sequential, Relu, Sigmoid
+from torch.nn.functional import softmax
 import logging
 from torch.nn.init import xavier_uniform
 
@@ -23,11 +23,11 @@ class GeneratorCIFAR10(nn.Module):
             Linear(self.latent_vector_length, 768),
             Relu(inplace=True),
             Linear(768, 1536),
-            sigmoid(),
+            Sigmoid(),
             Linear(1536, 2304),
             Relu(inplace=True),
             Linear(2304, 3072),
-            sigmoid()
+            Sigmoid(inplace=True)
         )
 
         if init_randomly_weights:
