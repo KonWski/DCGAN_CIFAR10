@@ -181,6 +181,5 @@ def train_model(
             checkpoint_path = f"{checkpoints_dir}/GeneratorCIFAR10"
             save_checkpoint(checkpoint, checkpoint_path)
 
-        logging.info(f"running_loss_discriminator: {running_loss_discriminator}, running_loss_generator: {running_loss_generator}")
         logging.info(f"Epoch: {epoch}, loss_discriminator: {epoch_loss_discriminator}, loss_generator: {epoch_loss_generator}")
         logging.info(f"Epoch: {epoch}, epoch_acc_fake: {epoch_acc_fake}, epoch_acc_real: {epoch_acc_real}")
