@@ -145,8 +145,6 @@ def train_model(
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
 
-            running_loss_discriminator += loss_discriminator.item()
-
             ##########################
             # Generator's training
             ##########################
@@ -159,7 +157,13 @@ def train_model(
             optimizer_generator.step()
 
             # iteration statistics
+            running_loss_discriminator += loss_discriminator.item()
             running_loss_generator += loss_generator.item()
+            if loss_discriminator.item() > 0:
+                print(f"loss_discriminator.item(): {loss_discriminator.item()}")
+                print(f"type(loss_discriminator.item()): {type(loss_discriminator.item())}")
+                print(f"running_loss_discriminator: {running_loss_discriminator}")
+
 
         # epoch statistics
         epoch_loss_discriminator = running_loss_discriminator / len_dataset
