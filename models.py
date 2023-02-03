@@ -55,7 +55,7 @@ class DiscriminatorCIFAR10(nn.Module):
     def __init__(self, init_randomly_weights: bool = False):
 
         super().__init__()
-        self.main = Compose(
+        self.main = Sequential(
             Conv2d(3, 6, 3),
             ReLU(inplace=True),
             Dropout(p=0.2, inplace=True),
