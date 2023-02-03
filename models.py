@@ -75,7 +75,8 @@ class DiscriminatorCIFAR10(nn.Module):
 
 
 def init_weights_xavier(m):
-    xavier_uniform(m.weight)
+    if isinstance(m, Linear)
+        xavier_uniform(m.weight)
 
 
 def save_checkpoint(checkpoint: dict, checkpoint_path: str):
