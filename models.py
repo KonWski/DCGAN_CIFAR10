@@ -27,7 +27,7 @@ class GeneratorCIFAR10(nn.Module):
             Linear(1536, 2304),
             ReLU(inplace=True),
             Linear(2304, 3072),
-            Sigmoid(inplace=True)
+            Sigmoid()
         )
 
         if init_randomly_weights:
