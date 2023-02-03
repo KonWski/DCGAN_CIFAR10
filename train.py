@@ -90,14 +90,14 @@ def train_model(
     lowest_epoch_loss_generator = float("inf")
 
     for epoch in range(n_epochs):
+        
+        # calculated parameters
+        running_loss_discriminator = 0.0
+        running_loss_generator = 0.0
+        running_corrects_real = 0
+        running_corrects_fake = 0
 
         for id, batch in enumerate(loader, 0):
-            
-            # calculated parameters
-            running_loss_discriminator = 0.0
-            running_loss_generator = 0.0
-            running_corrects_real = 0
-            running_corrects_fake = 0
 
             ##########################
             # Discriminator's training
@@ -159,11 +159,6 @@ def train_model(
             # iteration statistics
             running_loss_discriminator += loss_discriminator.item()
             running_loss_generator += loss_generator.item()
-            if loss_discriminator.item() > 0:
-                print(f"loss_discriminator.item(): {loss_discriminator.item()}")
-                print(f"type(loss_discriminator.item()): {type(loss_discriminator.item())}")
-                print(f"running_loss_discriminator: {running_loss_discriminator}")
-
 
         # epoch statistics
         epoch_loss_discriminator = running_loss_discriminator / len_dataset
