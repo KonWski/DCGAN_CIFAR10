@@ -2,6 +2,7 @@ from torch import nn, Tensor, save, load
 from torch.nn import Linear, Dropout, Conv2d, Flatten
 from torch.nn.functional import relu, sigmoid, softmax
 import logging
+from torch.nn.init import xavier_uniform
 
 class GeneratorCIFAR10(nn.Module):
     '''
@@ -11,8 +12,10 @@ class GeneratorCIFAR10(nn.Module):
     ----------
     latent_vector_length: int
         length of input noise vector
+    init_randomly_weights: bool
+        init weigts of layers using Xavier weight initialisation
     '''
-    def __init__(self, latent_vector_length: int):
+    def __init__(self, latent_vector_length: int, init_randomly_weights: bool = False):
 
         super().__init__()
         self.latent_vector_length = latent_vector_length
@@ -20,6 +23,9 @@ class GeneratorCIFAR10(nn.Module):
         self.linear2 = Linear(768, 1536)
         self.linear3 = Linear(1536, 2304)
         self.linear4 = Linear(2304, 3072)
+
+        if init_randomly_weights:
+            init_weights_xavier(self)
 
 
     def forward(self, x: Tensor):
@@ -63,6 +69,10 @@ class DiscriminatorCIFAR10(nn.Module):
         x = softmax(x)
 
         return x
+
+
+def init_weights_xavier(m):
+    xavier_uniform(m.weight)
 
 
 def save_checkpoint(checkpoint: dict, checkpoint_path: str):
