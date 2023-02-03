@@ -142,12 +142,10 @@ def train_model(
 
             # update discriminator's weights
             loss_discriminator = (loss_0 + loss_1) / 2
-            if loss_discriminator > 0:
-                print(f"loss_discriminator: {loss_discriminator}")
-                print(f"loss_discriminator item: {loss_discriminator.item()}")
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
-            print(f"loss_discriminator after backward: {loss_discriminator}")
+
+            running_loss_discriminator += loss_discriminator.item()
 
             ##########################
             # Generator's training
@@ -161,7 +159,6 @@ def train_model(
             optimizer_generator.step()
 
             # iteration statistics
-            running_loss_discriminator += loss_discriminator.item()
             running_loss_generator += loss_generator.item()
 
         # epoch statistics
