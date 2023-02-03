@@ -7,7 +7,7 @@ class CIFAR10GAN(CIFAR10):
             root: str, 
             class_name: str,
             train: bool = True,
-            transform: Compose = Compose([ToTensor()])
+            transform: Compose = Compose([ToTensor()]),
             download: bool = False,
         ) -> None:
         '''
