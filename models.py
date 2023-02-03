@@ -25,7 +25,7 @@ class GeneratorCIFAR10(nn.Module):
         self.linear4 = Linear(2304, 3072)
 
         if init_randomly_weights:
-            init_weights_xavier(self)
+            self.apply(init_weights_xavier)
 
 
     def forward(self, x: Tensor):
