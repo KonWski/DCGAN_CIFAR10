@@ -71,8 +71,7 @@ class DiscriminatorCIFAR10(nn.Module):
         x = self.dropout(x)
         x = relu(self.linear2(x))
         x = self.dropout(x)
-        x = relu(self.linear3(x))
-        x = softmax(x)
+        x = self.linear3(x)
         return x
 
 
