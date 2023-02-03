@@ -81,6 +81,7 @@ class DiscriminatorCIFAR10(nn.Module):
 
 
 def init_weights_xavier(m):
+    print(m)
     if isinstance(m, Linear) or isinstance(m, Conv2d):
         xavier_uniform(m.weight)
 
