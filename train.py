@@ -169,6 +169,8 @@ def train_model(
         # save generator checkpoint
         if epoch_loss_generator < lowest_epoch_loss_generator:
             
+            lowest_epoch_loss_generator = epoch_loss_generator
+
             checkpoint = {
                 "model_state_dict": generator.state_dict(),
                 "latent_vector_length": latent_vector_length,
