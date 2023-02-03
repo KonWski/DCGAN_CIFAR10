@@ -1,5 +1,5 @@
 from torch import nn, Tensor, save, load
-from torch.nn import Linear, Dropout, Conv2d, Flatten, Sequential, Relu, Sigmoid
+from torch.nn import Linear, Dropout, Conv2d, Flatten, Sequential, ReLU, Sigmoid
 from torch.nn.functional import softmax
 import logging
 from torch.nn.init import xavier_uniform
@@ -21,11 +21,11 @@ class GeneratorCIFAR10(nn.Module):
         self.latent_vector_length = latent_vector_length
         self.main = Sequential(
             Linear(self.latent_vector_length, 768),
-            Relu(inplace=True),
+            ReLU(inplace=True),
             Linear(768, 1536),
             Sigmoid(),
             Linear(1536, 2304),
-            Relu(inplace=True),
+            ReLU(inplace=True),
             Linear(2304, 3072),
             Sigmoid(inplace=True)
         )
