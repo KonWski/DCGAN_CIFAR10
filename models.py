@@ -1,6 +1,6 @@
 from torch import nn, Tensor, save, load
 from torch.nn import Linear, Dropout, Conv2d, Flatten
-from torch.nn.functional import relu, sigmoid, softmax
+from torch.nn.functional import relu, sigmoid, tanh
 import logging
 from torch.nn.init import xavier_uniform
 
@@ -33,7 +33,7 @@ class GeneratorCIFAR10(nn.Module):
         x = relu(self.linear1(x))
         x = sigmoid(self.linear2(x))
         x = relu(self.linear3(x))
-        x = sigmoid(self.linear4(x))
+        x = tanh(self.linear4(x))
         x = x.view(-1, 3, 32, 32)
 
         return x
