@@ -106,7 +106,7 @@ def train_model(
             # inputs for discriminator and generator
             real_images = batch[0]
             real_images_size = real_images.shape[0]
-            noise = torch.rand(real_images_size, latent_vector_length)
+            noise = torch.randn(real_images_size, latent_vector_length)
 
             # labels
             tensor_zeros = torch.full((real_images_size, 1), 0, dtype=torch.float)
