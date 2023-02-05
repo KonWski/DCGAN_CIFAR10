@@ -12,10 +12,10 @@ class GeneratorCIFAR10(nn.Module):
     ----------
     latent_vector_length: int
         length of input noise vector
-    init_randomly_weights: bool
+    init_weights_xavier: bool
         init weigts of layers using Xavier weight initialisation
     '''
-    def __init__(self, latent_vector_length: int, init_randomly_weights: bool = False):
+    def __init__(self, latent_vector_length: int, init_weights_xavier: bool = False):
 
         super().__init__()
         self.latent_vector_length = latent_vector_length
@@ -24,7 +24,7 @@ class GeneratorCIFAR10(nn.Module):
         self.linear3 = Linear(1536, 2304)
         self.linear4 = Linear(2304, 3072)
 
-        if init_randomly_weights:
+        if init_weights_xavier:
             self.apply(init_weights_xavier)
 
 
@@ -48,12 +48,12 @@ class GeneratorCIFAR10(nn.Module):
 
 class DiscriminatorCIFAR10(nn.Module):
     '''
-    Returns probability of image being sampled from original training set
+    Classifies image as fake (created by generator) or real (sampled from original dataset)
 
-    init_randomly_weights: bool
+    init_weights_xavier: bool
         init weigts of layers using Xavier weight initialisation
     '''
-    def __init__(self, init_randomly_weights: bool = False):
+    def __init__(self, init_weights_xavier: bool = False):
         super().__init__()
         self.conv1 = Conv2d(3, 6, 3)
         self.conv2 = Conv2d(6, 12, 6)
@@ -63,7 +63,7 @@ class DiscriminatorCIFAR10(nn.Module):
         self.linear2 = Linear(1000, 100)
         self.linear3 = Linear(100, 2)
 
-        if init_randomly_weights:
+        if init_weights_xavier:
             self.apply(init_weights_xavier)
 
     def forward(self, x: Tensor):
@@ -115,14 +115,16 @@ def load_checkpoint(checkpoint_path: str):
                 - last finished number of epoch
                 - save time
                 - class_name
-                - loss from saved epoch
+                - generator's loss from saved epoch (train)
+                - discriminator's accuracy based on test data
+                - discriminator's accuracy based on data created by generator
                 
     '''
     checkpoint = load(checkpoint_path)
     latent_vector_length = checkpoint["latent_vector_length"]
 
     # initiate model
-    model = GeneratorCIFAR10(latent_vector_length)
+    model = GeneratorCIFAR10(latent_vector_length, False)
 
     # load parameters from checkpoint
     model.load_state_dict(checkpoint["model_state_dict"])
@@ -131,7 +133,7 @@ def load_checkpoint(checkpoint_path: str):
     logging.info(f"Loaded model from checkpoint: {checkpoint_path}")
     logging.info(f"Class name: {checkpoint['class_name']}")
     logging.info(f"Epoch: {checkpoint['epoch']}")
-    logging.info(f"Loss: {checkpoint['epoch_loss']}")
+    logging.info(f"epoch_train_loss: {checkpoint['epoch_loss']}")
     logging.info(f"Save dttm: {checkpoint['save_dttm']}")
     logging.info(8*"-")
 

@@ -13,12 +13,14 @@ def get_args():
     parser.add_argument('--root_datasets_dir', type=str, help='Path where dataset should be downloaded or where is it already stored')
     parser.add_argument('--class_name', type=str, help='One of ten classes in CIFAR10 dataset')
     parser.add_argument('--latent_vector_length', type=int, help='Length of random vector which will be transformed into an image by generator')
+    parser.add_argument('--init_generator_weights_xavier', type=str, help="Init generator's weights using Xavier's initialization")
+    parser.add_argument('--init_discriminator_weights_xavier', type=str, help="Init discriminator's weights using Xavier's initialization")
 
     args = vars(parser.parse_args())
     
     # parse str to boolean
     str_true = ["Y", "y", "Yes", "yes", "true", "True"]
-    bool_params = ["download_datasets"]
+    bool_params = ["download_datasets", "init_generator_weights_xavier", "init_discriminator_weights_xavier"]
     for param in bool_params:
         if args[param] in str_true:
             args[param] = True
@@ -46,4 +48,5 @@ if __name__ == "__main__":
 
     model = train_model(device, args["n_epochs"], args["batch_size"], args["checkpoints_dir"], 
                         args["download_datasets"], args["root_datasets_dir"], args["class_name"],
-                        args["latent_vector_length"])
+                        args["latent_vector_length"], args["init_generator_weights_xavier"],
+                        args["init_discriminator_weights_xavier"])

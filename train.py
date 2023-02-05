@@ -6,6 +6,7 @@ from torch.nn import BCELoss
 import logging
 from datetime import datetime
 from torchvision import transforms
+from evaluate import evaluate_model
 
 def train_model(
         device, 
@@ -15,11 +16,18 @@ def train_model(
         download_datasets: bool,
         root_datasets_dir: str,
         class_name: str,
-        latent_vector_length: int
+        latent_vector_length: int,
+        init_generator_weights_xavier: bool,
+        init_discriminator_weights_xavier: bool
     ):
     '''
     trains GAN model and saves its checkpoints to location
     given in checkpoints_dir.
+
+    Checkpoints of saved GAN should satisfy following conditions:
+    - lowest epoch's generator loss
+    - discriminator's accuracy on real dataset and fake images should be between 
+    [0.45, 0.55]
 
     Discriminator's training
     -----------
@@ -61,6 +69,10 @@ def train_model(
         one of ten classes in CIFAR10 dataset
     latent_vector_length: int
         length of random vector which will be transformed into an image by generator
+    init_generator_weights_xavier: bool
+        Init generator's weights using Xavier's initialization
+    init_discriminator_weights_xavier: bool
+        Init discriminator's weights using Xavier's initialization
     '''
     
     transform_cifar = transforms.Compose([
@@ -69,15 +81,14 @@ def train_model(
     ])
 
     # datasets and dataloaders
-    dataset = CIFAR10GAN(f'{root_datasets_dir}/train/', class_name, train=True, transform=transform_cifar, download=download_datasets)
-    loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
-
-    # number of observations
-    len_dataset = len(dataset)
+    dataset_train = CIFAR10GAN(f'{root_datasets_dir}/train/', class_name, train=True, transform=transform_cifar, download=download_datasets)
+    loader_train = torch.utils.data.DataLoader(dataset_train, batch_size=batch_size, shuffle=True)
+    dataset_test = CIFAR10GAN(f'{root_datasets_dir}/test/', class_name, train=False, transform=transform_cifar, download=download_datasets)
+    loader_test = torch.utils.data.DataLoader(dataset_test, batch_size=batch_size, shuffle=True)
 
     # models
-    generator = GeneratorCIFAR10(latent_vector_length, False).to(device)
-    discriminator = DiscriminatorCIFAR10(False).to(device)
+    generator = GeneratorCIFAR10(latent_vector_length, init_generator_weights_xavier).to(device)
+    discriminator = DiscriminatorCIFAR10(init_discriminator_weights_xavier).to(device)
 
     # optimizers
     optimizer_discriminator = Adam(discriminator.parameters(), lr=3e-4)
@@ -94,10 +105,8 @@ def train_model(
         # calculated parameters
         running_loss_discriminator = 0.0
         running_loss_generator = 0.0
-        running_corrects_real = 0
-        running_corrects_fake = 0
 
-        for id, batch in enumerate(loader, 0):
+        for id, batch in enumerate(loader_train, 0):
 
             ##########################
             # Discriminator's training
@@ -130,10 +139,6 @@ def train_model(
             classified_real_images = discriminator(real_images)
             classified_generated_images = discriminator(generated_images)
 
-            # correctly classified images
-            running_corrects_real += torch.sum(torch.argmax(classified_real_images, 1) == torch.argmax(labels_real_images, 1)).item()
-            running_corrects_fake += torch.sum(torch.argmax(classified_generated_images, 1) == torch.argmax(labels_fake_images, 1)).item()
-
             # calculate loss_0
             loss_0 = criterion(classified_real_images, labels_real_images)
 
@@ -160,26 +165,33 @@ def train_model(
             running_loss_discriminator += loss_discriminator.item()
             running_loss_generator += loss_generator.item()
 
-        # epoch statistics
-        epoch_acc_real = running_corrects_real / len_dataset
-        epoch_acc_fake = running_corrects_fake / len_dataset
+        logging.info(f"Epoch: {epoch}")
+        logging.info(f"State: train, loss_discriminator: {running_loss_discriminator}, loss_generator: {running_loss_generator}")
+
+        epoch_acc_real, epoch_acc_fake, loss_generator_test = evaluate_model(device, discriminator, generator, 
+            loader_test, len(dataset_test), epoch)
+        
+        logging.info(f"State: test, loss_generator: {loss_generator_test}, acc_real_images: {epoch_acc_real}, acc_fake_images: {epoch_acc_fake}")
 
         # save generator checkpoint
-        if running_loss_generator < lowest_epoch_loss_generator:
-            
-            lowest_epoch_loss_generator = running_loss_generator
+        if loss_generator_test >= 0.95 * lowest_epoch_loss_generator \
+            and loss_generator_test <= 1.05 * lowest_epoch_loss_generator:
 
-            checkpoint = {
-                "model_state_dict": generator.state_dict(),
-                "latent_vector_length": latent_vector_length,
-                "class_name": class_name,
-                "epoch": epoch,
-                "epoch_loss": running_loss_generator,
-                "save_dttm": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
+            lowest_epoch_loss_generator = min(lowest_epoch_loss_generator, loss_generator_test)
+            epoch_acc_real, epoch_acc_fake = evaluate_model(device, discriminator, generator, loader_test, len(dataset_test), epoch)
 
-            checkpoint_path = f"{checkpoints_dir}/GeneratorCIFAR10"
-            save_checkpoint(checkpoint, checkpoint_path)
+            if abs(0.5 - epoch_acc_real) <= 0.05 and abs(0.5 - epoch_acc_fake) <= 0.05:
 
-        logging.info(f"Epoch: {epoch}, loss_discriminator: {running_loss_discriminator}, loss_generator: {running_loss_generator}")
-        logging.info(f"Epoch: {epoch}, epoch_acc_fake: {epoch_acc_fake}, epoch_acc_real: {epoch_acc_real}")
+                checkpoint = {
+                    "model_state_dict": generator.state_dict(),
+                    "latent_vector_length": latent_vector_length,
+                    "class_name": class_name,
+                    "epoch": epoch,
+                    "epoch_generator_train_loss": loss_generator_test,
+                    "epoch_test_acc_real": epoch_acc_real,
+                    "epoch_test_acc_fake": epoch_acc_fake,
+                    "save_dttm": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+
+                checkpoint_path = f"{checkpoints_dir}/GeneratorCIFAR10"
+                save_checkpoint(checkpoint, checkpoint_path)
