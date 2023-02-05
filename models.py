@@ -1,6 +1,6 @@
 from torch import nn, Tensor, save, load
 from torch.nn import Linear, Dropout, Conv2d, Flatten
-from torch.nn.functional import relu, sigmoid, tanh
+from torch.nn.functional import relu, sigmoid, tanh, leaky_relu
 import logging
 from torch.nn.init import xavier_uniform
 
@@ -30,9 +30,16 @@ class GeneratorCIFAR10(nn.Module):
 
     def forward(self, x: Tensor):
 
-        x = relu(self.linear1(x))
-        x = sigmoid(self.linear2(x))
-        x = relu(self.linear3(x))
+        # former version
+        # x = relu(self.linear1(x))
+        # x = sigmoid(self.linear2(x))
+        # x = relu(self.linear3(x))
+        # x = tanh(self.linear4(x))
+        # x = x.view(-1, 3, 32, 32)
+
+        x = leaky_relu(self.linear1(x))
+        x = leaky_relu(self.linear2(x))
+        x = leaky_relu(self.linear3(x))
         x = tanh(self.linear4(x))
         x = x.view(-1, 3, 32, 32)
 
@@ -45,9 +52,6 @@ class DiscriminatorCIFAR10(nn.Module):
 
     init_randomly_weights: bool
         init weigts of layers using Xavier weight initialisation
-
-    Note:
-        Original Discriminator used MaxOut activation function
     '''
     def __init__(self, init_randomly_weights: bool = False):
         super().__init__()
