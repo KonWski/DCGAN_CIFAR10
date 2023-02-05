@@ -12,10 +12,10 @@ class GeneratorCIFAR10(nn.Module):
     ----------
     latent_vector_length: int
         length of input noise vector
-    init_weights_xavier: bool
+    inititialize_weights_xavier: bool
         init weigts of layers using Xavier weight initialisation
     '''
-    def __init__(self, latent_vector_length: int, init_weights_xavier: bool = False):
+    def __init__(self, latent_vector_length: int, inititialize_weights_xavier: bool = False):
 
         super().__init__()
         self.latent_vector_length = latent_vector_length
@@ -24,7 +24,7 @@ class GeneratorCIFAR10(nn.Module):
         self.linear3 = Linear(1536, 2304)
         self.linear4 = Linear(2304, 3072)
 
-        if init_weights_xavier:
+        if inititialize_weights_xavier:
             self.apply(init_weights_xavier)
 
 
@@ -50,10 +50,10 @@ class DiscriminatorCIFAR10(nn.Module):
     '''
     Classifies image as fake (created by generator) or real (sampled from original dataset)
 
-    init_weights_xavier: bool
+    inititialize_weights_xavier: bool
         init weigts of layers using Xavier weight initialisation
     '''
-    def __init__(self, init_weights_xavier: bool = False):
+    def __init__(self, inititialize_weights_xavier: bool = False):
         super().__init__()
         self.conv1 = Conv2d(3, 6, 3)
         self.conv2 = Conv2d(6, 12, 6)
@@ -63,7 +63,7 @@ class DiscriminatorCIFAR10(nn.Module):
         self.linear2 = Linear(1000, 100)
         self.linear3 = Linear(100, 2)
 
-        if init_weights_xavier:
+        if inititialize_weights_xavier:
             self.apply(init_weights_xavier)
 
     def forward(self, x: Tensor):
