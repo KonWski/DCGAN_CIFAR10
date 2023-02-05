@@ -161,27 +161,25 @@ def train_model(
             running_loss_generator += loss_generator.item()
 
         # epoch statistics
-        epoch_loss_discriminator = running_loss_discriminator / len_dataset
-        epoch_loss_generator = running_loss_generator / len_dataset
         epoch_acc_real = running_corrects_real / len_dataset
         epoch_acc_fake = running_corrects_fake / len_dataset
 
         # save generator checkpoint
-        if epoch_loss_generator < lowest_epoch_loss_generator:
+        if running_loss_generator < lowest_epoch_loss_generator:
             
-            lowest_epoch_loss_generator = epoch_loss_generator
+            lowest_epoch_loss_generator = running_loss_generator
 
             checkpoint = {
                 "model_state_dict": generator.state_dict(),
                 "latent_vector_length": latent_vector_length,
                 "class_name": class_name,
                 "epoch": epoch,
-                "epoch_loss": epoch_loss_generator,
+                "epoch_loss": running_loss_generator,
                 "save_dttm": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
 
             checkpoint_path = f"{checkpoints_dir}/GeneratorCIFAR10"
             save_checkpoint(checkpoint, checkpoint_path)
 
-        logging.info(f"Epoch: {epoch}, loss_discriminator: {epoch_loss_discriminator}, loss_generator: {epoch_loss_generator}")
+        logging.info(f"Epoch: {epoch}, loss_discriminator: {running_loss_discriminator}, loss_generator: {running_loss_generator}")
         logging.info(f"Epoch: {epoch}, epoch_acc_fake: {epoch_acc_fake}, epoch_acc_real: {epoch_acc_real}")
