@@ -19,10 +19,22 @@ class GeneratorCIFAR10(nn.Module):
 
         super().__init__()
         self.latent_vector_length = latent_vector_length
-        self.linear1 = Linear(self.latent_vector_length, 768)
-        self.linear2 = Linear(768, 1536)
-        self.linear3 = Linear(1536, 2304)
-        self.linear4 = Linear(2304, 3072)
+        self.linear1 = Linear(self.latent_vector_length, 6912)
+        # (48, 48, 3)
+        self.conv1 = Conv2d(3, 6, 3)
+        # (46, 46, 6)
+        self.conv2 = Conv2d(6, 24, 6)
+        # (41, 41, 24)
+        self.conv3 = Conv2d(24, 48, 6)
+        # (36, 36, 48)
+        self.conv4 = Conv2d(48, 3, 5)
+        # (32, 32, 3)
+
+        # self.latent_vector_length = latent_vector_length
+        # self.linear1 = Linear(self.latent_vector_length, 768)
+        # self.linear2 = Linear(768, 1536)
+        # self.linear3 = Linear(1536, 2304)
+        # self.linear4 = Linear(2304, 3072)
 
         if inititialize_weights_xavier:
             self.apply(init_weights_xavier)
@@ -31,10 +43,17 @@ class GeneratorCIFAR10(nn.Module):
     def forward(self, x: Tensor):
 
         x = relu(self.linear1(x))
-        x = relu(self.linear2(x))
-        x = relu(self.linear3(x))
-        x = tanh(self.linear4(x))
-        x = x.view(-1, 3, 32, 32)
+        x = x.view(-1, 64, 64, 3)
+        x = relu(self.conv1(x))
+        x = relu(self.conv2(x))
+        x = relu(self.conv3(x))
+        x = relu(self.conv4(x))
+
+        # x = relu(self.linear1(x))
+        # x = relu(self.linear2(x))
+        # x = relu(self.linear3(x))
+        # x = tanh(self.linear4(x))
+        # x = x.view(-1, 3, 32, 32)
         return x
 
 
