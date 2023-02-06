@@ -47,7 +47,7 @@ class GeneratorCIFAR10(nn.Module):
         x = relu(self.conv1(x))
         x = relu(self.conv2(x))
         x = relu(self.conv3(x))
-        x = relu(self.conv4(x))
+        x = tanh(self.conv4(x))
 
         # x = relu(self.linear1(x))
         # x = relu(self.linear2(x))
