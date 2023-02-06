@@ -35,7 +35,7 @@ class GeneratorCIFAR10(nn.Module):
         x = relu(self.linear3(x))
         x = tanh(self.linear4(x))
         x = x.view(-1, 3, 32, 32)
-
+        print(f"Generator output shape: {x.shape}")
         return x
 
 
@@ -48,11 +48,11 @@ class DiscriminatorCIFAR10(nn.Module):
     '''
     def __init__(self, inititialize_weights_xavier: bool = False):
         super().__init__()
-        # self.conv1 = Conv2d(3, 6, 3)
-        # self.conv2 = Conv2d(6, 12, 6)
+        self.conv1 = Conv2d(3, 6, 3)
+        self.conv2 = Conv2d(6, 12, 6)
         self.flatten = Flatten()
         self.dropout = Dropout(p=0.2)
-        self.linear1 = Linear(32768, 1000)
+        self.linear1 = Linear(7500, 1000)
         self.linear2 = Linear(1000, 100)
         self.linear3 = Linear(100, 2)
 
@@ -60,9 +60,9 @@ class DiscriminatorCIFAR10(nn.Module):
             self.apply(init_weights_xavier)
 
     def forward(self, x: Tensor):
-        
-        # x = leaky_relu(self.conv1(x))
-        # x = leaky_relu(self.conv2(x))
+        print(f"Discriminator input shape: {x.shape}")
+        x = leaky_relu(self.conv1(x))
+        x = leaky_relu(self.conv2(x))
         x = self.flatten(x)
         x = leaky_relu(self.linear1(x))
         x = self.dropout(x)
