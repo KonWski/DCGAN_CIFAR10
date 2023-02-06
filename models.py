@@ -116,9 +116,6 @@ def load_checkpoint(checkpoint_path: str):
                 - save time
                 - class_name
                 - generator's loss from saved epoch (train)
-                - discriminator's accuracy based on test data
-                - discriminator's accuracy based on data created by generator
-                
     '''
     checkpoint = load(checkpoint_path)
     latent_vector_length = checkpoint["latent_vector_length"]
@@ -133,7 +130,7 @@ def load_checkpoint(checkpoint_path: str):
     logging.info(f"Loaded model from checkpoint: {checkpoint_path}")
     logging.info(f"Class name: {checkpoint['class_name']}")
     logging.info(f"Epoch: {checkpoint['epoch']}")
-    logging.info(f"epoch_train_loss: {checkpoint['epoch_loss']}")
+    logging.info(f"epoch_generator_loss: {checkpoint['epoch_generator_loss']}")
     logging.info(f"Save dttm: {checkpoint['save_dttm']}")
     logging.info(8*"-")
 
