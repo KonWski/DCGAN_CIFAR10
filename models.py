@@ -20,9 +20,9 @@ class GeneratorCIFAR10(nn.Module):
         super().__init__()
         self.latent_vector_length = latent_vector_length
         self.linear1 = Linear(self.latent_vector_length, 768)
-        self.linear2 = Linear(768, 1536)
-        self.linear3 = Linear(1536, 2304)
-        self.linear4 = Linear(2304, 3072)
+        self.linear2 = Linear(768, 3072)
+        # self.linear3 = Linear(1536, 2304)
+        # self.linear4 = Linear(2304, 3072)
 
         if inititialize_weights_xavier:
             self.apply(init_weights_xavier)
@@ -31,9 +31,9 @@ class GeneratorCIFAR10(nn.Module):
     def forward(self, x: Tensor):
 
         x = relu(self.linear1(x))
-        x = relu(self.linear2(x))
-        x = relu(self.linear3(x))
-        x = tanh(self.linear4(x))
+        # x = relu(self.linear2(x))
+        # x = relu(self.linear3(x))
+        x = tanh(self.linear2(x))
         x = x.view(-1, 3, 32, 32)
 
         return x
