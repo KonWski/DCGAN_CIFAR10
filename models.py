@@ -37,9 +37,9 @@ class GeneratorCIFAR10(nn.Module):
         # x = tanh(self.linear4(x))
         # x = x.view(-1, 3, 32, 32)
 
-        x = leaky_relu(self.linear1(x))
-        x = leaky_relu(self.linear2(x))
-        x = leaky_relu(self.linear3(x))
+        x = relu(self.linear1(x))
+        x = relu(self.linear2(x))
+        x = relu(self.linear3(x))
         x = tanh(self.linear4(x))
         x = x.view(-1, 3, 32, 32)
 
@@ -68,12 +68,12 @@ class DiscriminatorCIFAR10(nn.Module):
 
     def forward(self, x: Tensor):
         
-        x = relu(self.conv1(x))
-        x = relu(self.conv2(x))
+        x = leaky_relu(self.conv1(x))
+        x = leaky_relu(self.conv2(x))
         x = self.flatten(x)
-        x = relu(self.linear1(x))
+        x = leaky_relu(self.linear1(x))
         x = self.dropout(x)
-        x = relu(self.linear2(x))
+        x = leaky_relu(self.linear2(x))
         x = self.dropout(x)
         x = self.linear3(x)
         x = sigmoid(x)
