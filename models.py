@@ -42,11 +42,11 @@ class GeneratorCIFAR10(nn.Module):
 
     def forward(self, x: Tensor):
 
-        x = relu(self.linear1(x))
+        x = leaky_relu(self.linear1(x))
         x = x.view(-1, 3, 48, 48)
-        x = relu(self.conv1(x))
-        x = relu(self.conv2(x))
-        x = relu(self.conv3(x))
+        x = leaky_relu(self.conv1(x))
+        x = leaky_relu(self.conv2(x))
+        x = leaky_relu(self.conv3(x))
         x = tanh(self.conv4(x))
 
         # x = relu(self.linear1(x))
