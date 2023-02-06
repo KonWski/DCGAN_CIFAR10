@@ -41,7 +41,7 @@ class GeneratorCIFAR10(nn.Module):
         x = relu(self.linear2(x))
         x = relu(self.linear3(x))
         x = tanh(self.linear4(x))
-        x = x.view(-1, 3, 32, 32)
+        x = x.view(-1, 32, 32, 3)
 
         return x
 
