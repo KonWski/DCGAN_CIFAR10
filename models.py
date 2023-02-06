@@ -30,18 +30,11 @@ class GeneratorCIFAR10(nn.Module):
 
     def forward(self, x: Tensor):
 
-        # former version
-        # x = relu(self.linear1(x))
-        # x = sigmoid(self.linear2(x))
-        # x = relu(self.linear3(x))
-        # x = tanh(self.linear4(x))
-        # x = x.view(-1, 3, 32, 32)
-
         x = relu(self.linear1(x))
         x = relu(self.linear2(x))
         x = relu(self.linear3(x))
         x = tanh(self.linear4(x))
-        x = x.view(-1, 32, 32, 3)
+        x = x.view(-1, 3, 32, 32)
 
         return x
 
