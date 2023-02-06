@@ -180,21 +180,19 @@ def train_model(
         logging.info(f"Epoch: {epoch}, epoch_acc_real: {epoch_acc_real}, epoch_acc_fake: {epoch_acc_fake}")        
 
         # save generator checkpoint
-        if epoch == 1 or (running_loss_generator >= 0.95 * lowest_epoch_loss_generator \
-            and running_loss_generator <= 1.05 * lowest_epoch_loss_generator):
+        if running_loss_generator < lowest_epoch_loss_generator and abs(0.5 - epoch_acc_real) <= 0.05 \
+            and abs(0.5 - epoch_acc_fake) <= 0.05:
 
             lowest_epoch_loss_generator = min(lowest_epoch_loss_generator, running_loss_generator)
 
-            if abs(0.5 - epoch_acc_real) <= 0.05 and abs(0.5 - epoch_acc_fake) <= 0.05:
+            checkpoint = {
+                "model_state_dict": generator.state_dict(),
+                "latent_vector_length": latent_vector_length,
+                "class_name": class_name,
+                "epoch": epoch,
+                "epoch_generator_loss": running_loss_generator,
+                "save_dttm": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
 
-                checkpoint = {
-                    "model_state_dict": generator.state_dict(),
-                    "latent_vector_length": latent_vector_length,
-                    "class_name": class_name,
-                    "epoch": epoch,
-                    "epoch_generator_loss": running_loss_generator,
-                    "save_dttm": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                }
-
-                checkpoint_path = f"{checkpoints_dir}/GeneratorCIFAR10"
-                save_checkpoint(checkpoint, checkpoint_path)
+            checkpoint_path = f"{checkpoints_dir}/GeneratorCIFAR10"
+            save_checkpoint(checkpoint, checkpoint_path)
