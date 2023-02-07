@@ -39,7 +39,7 @@ class GeneratorCIFAR10(nn.Module):
     def forward(self, x: Tensor):
 
         x = relu(self.linear1(x))
-        x = x.view(-1, 2, 2, 512)
+        x = x.view(2, 2, 512)
         x = relu(self.convtranspose1(x)) # (256, 4, 4)
         x = relu(self.convtranspose2(x)) # (128, 8, 8)
         x = relu(self.convtranspose3(x)) # (128, 16, 16)
