@@ -70,7 +70,7 @@ class DiscriminatorCIFAR10(nn.Module):
         x = leaky_relu(self.conv1(x))
         x = leaky_relu(self.conv2(x))
         x = self.flatten(x)
-        x = leaky_relu(self.linear1(x))
+        x = self.linear1(x)
         # x = self.dropout(x)
         # x = leaky_relu(self.linear2(x))
         # x = self.dropout(x)
