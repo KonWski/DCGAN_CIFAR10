@@ -25,19 +25,13 @@ class GeneratorCIFAR10(nn.Module):
         self.convtranspose3 = ConvTranspose2d(in_channels=128, out_channels=128, kernel_size=2, stride=2)
         self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=2)
 
-        # self.latent_vector_length = latent_vector_length
-        # self.linear1 = Linear(self.latent_vector_length, 768)
-        # self.linear2 = Linear(768, 1536)
-        # self.linear3 = Linear(1536, 2304)
-        # self.linear4 = Linear(2304, 3072)
-
         if inititialize_weights_xavier:
             self.apply(init_weights_xavier)
 
 
     def forward(self, x: Tensor):
 
-        print(f"x shape at begin: {x.shape}")
+        # print(f"x shape at begin: {x.shape}")
         x = leaky_relu(self.linear1(x))
         x = x.view(-1, 512, 2, 2)
         x = leaky_relu(self.convtranspose1(x)) # (256, 4, 4)
@@ -45,15 +39,8 @@ class GeneratorCIFAR10(nn.Module):
         x = leaky_relu(self.convtranspose3(x)) # (128, 16, 16)
         x = tanh(self.convtranspose4(x)) # (3, 32, 32)
         x = x.view(-1, 3, 32, 32)
-        print(f"x shape at end: {x.shape}")
+        # print(f"x shape at end: {x.shape}")
         
-        print(f"max x : {x.max()}")
-        print(f"min x : {x.min()}")
-        # x = relu(self.linear1(x))
-        # x = relu(self.linear2(x))
-        # x = relu(self.linear3(x))
-        # x = tanh(self.linear4(x))
-        # x = x.view(-1, 3, 32, 32)
         return x
 
 
