@@ -181,10 +181,10 @@ def train_model(
         logging.info(f"Epoch: {epoch}, epoch_acc_real: {epoch_acc_real}, epoch_acc_fake: {epoch_acc_fake}")        
 
         # save generator checkpoint
-        if running_loss_generator < lowest_epoch_loss_generator and abs(0.5 - epoch_acc_real) <= 0.05 \
-            and abs(0.5 - epoch_acc_fake) <= 0.05:
+        # if running_loss_generator < lowest_epoch_loss_generator and abs(0.5 - epoch_acc_real) <= 0.05 \
+        #     and abs(0.5 - epoch_acc_fake) <= 0.05:
         
-        # if running_loss_generator < lowest_epoch_loss_generator:
+        if running_loss_generator < lowest_epoch_loss_generator:
 
             lowest_epoch_loss_generator = min(lowest_epoch_loss_generator, running_loss_generator)
 
