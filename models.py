@@ -43,7 +43,7 @@ class GeneratorCIFAR10(nn.Module):
         x = leaky_relu(self.convtranspose1(x)) # (256, 4, 4)
         x = leaky_relu(self.convtranspose2(x)) # (128, 8, 8)
         x = leaky_relu(self.convtranspose3(x)) # (128, 16, 16)
-        x = leaky_relu(self.convtranspose4(x)) # (3, 32, 32)
+        x = tanh(self.convtranspose4(x)) # (3, 32, 32)
         x = x.view(-1, 3, 32, 32)
         print(f"x shape at end: {x.shape}")
         
