@@ -20,7 +20,7 @@ class GeneratorCIFAR10(nn.Module):
         super().__init__()
         self.latent_vector_length = latent_vector_length
         # 
-        self.linear1 = Linear(self.latent_vector_length, 2028)
+        self.linear1 = Linear(self.latent_vector_length, 2048)
         self.convtranspose1 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=2, stride=2)
         self.convtranspose2 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=2, stride=2)
         self.convtranspose3 = ConvTranspose2d(in_channels=128, out_channels=128, kernel_size=2, stride=2)
@@ -39,7 +39,7 @@ class GeneratorCIFAR10(nn.Module):
     def forward(self, x: Tensor):
 
         x = relu(self.linear1(x))
-        x = x.view(2, 2, 512)
+        x = x.view(-1, 2, 2, 512)
         x = relu(self.convtranspose1(x)) # (256, 4, 4)
         x = relu(self.convtranspose2(x)) # (128, 8, 8)
         x = relu(self.convtranspose3(x)) # (128, 16, 16)
