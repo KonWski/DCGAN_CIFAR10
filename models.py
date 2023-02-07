@@ -32,8 +32,8 @@ class GeneratorCIFAR10(nn.Module):
     def forward(self, x: Tensor):
 
         # print(f"x shape at begin: {x.shape}")
-        # x = leaky_relu(self.linear1(x))
-        # x = x.view(-1, 512, 2, 2)
+        x = leaky_relu(self.linear1(x))
+        x = x.view(-1, 512, 2, 2)
         x = leaky_relu(self.convtranspose1(x)) # (256, 4, 4)
         x = leaky_relu(self.convtranspose2(x)) # (128, 8, 8)
         x = leaky_relu(self.convtranspose3(x)) # (128, 16, 16)
@@ -56,7 +56,7 @@ class DiscriminatorCIFAR10(nn.Module):
         self.conv1 = Conv2d(3, 6, 3)
         self.conv2 = Conv2d(6, 12, 6)
         self.flatten = Flatten()
-        self.dropout = Dropout(p=0.4)
+        self.dropout = Dropout(p=0.9)
         self.linear1 = Linear(7500, 1000)
         self.linear2 = Linear(1000, 100)
         self.linear3 = Linear(100, 2)
