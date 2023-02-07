@@ -37,6 +37,7 @@ class GeneratorCIFAR10(nn.Module):
 
     def forward(self, x: Tensor):
 
+        print(f"x shape at begin: {x.shape}")
         x = leaky_relu(self.linear1(x))
         x = x.view(-1, 512, 2, 2)
         x = leaky_relu(self.convtranspose1(x)) # (256, 4, 4)
@@ -44,7 +45,10 @@ class GeneratorCIFAR10(nn.Module):
         x = leaky_relu(self.convtranspose3(x)) # (128, 16, 16)
         x = leaky_relu(self.convtranspose4(x)) # (3, 32, 32)
         x = x.view(-1, 3, 32, 32)
+        print(f"x shape at end: {x.shape}")
         
+        print(f"max x : {x.max()}")
+        print(f"min x : {x.min()}")
         # x = relu(self.linear1(x))
         # x = relu(self.linear2(x))
         # x = relu(self.linear3(x))
