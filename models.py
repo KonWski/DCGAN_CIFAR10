@@ -1,5 +1,5 @@
 from torch import nn, Tensor, save, load
-from torch.nn import Linear, Dropout, Conv2d, Flatten
+from torch.nn import Linear, Dropout, Conv2d, Flatten, ConvTranspose2d
 from torch.nn.functional import relu, sigmoid, tanh, leaky_relu
 import logging
 from torch.nn.init import xavier_uniform
@@ -19,16 +19,12 @@ class GeneratorCIFAR10(nn.Module):
 
         super().__init__()
         self.latent_vector_length = latent_vector_length
-        self.linear1 = Linear(self.latent_vector_length, 6912)
-        # (48, 48, 3)
-        self.conv1 = Conv2d(3, 6, 3)
-        # (46, 46, 6)
-        self.conv2 = Conv2d(6, 24, 6)
-        # (41, 41, 24)
-        self.conv3 = Conv2d(24, 48, 6)
-        # (36, 36, 48)
-        self.conv4 = Conv2d(48, 3, 5)
-        # (32, 32, 3)
+        # 
+        self.linear1 = Linear(self.latent_vector_length, 2028)
+        self.convtranspose1 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=2, stride=2)
+        self.convtranspose2 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=2, stride=2)
+        self.convtranspose3 = ConvTranspose2d(in_channels=128, out_channels=128, kernel_size=2, stride=2)
+        self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=2)
 
         # self.latent_vector_length = latent_vector_length
         # self.linear1 = Linear(self.latent_vector_length, 768)
@@ -42,13 +38,13 @@ class GeneratorCIFAR10(nn.Module):
 
     def forward(self, x: Tensor):
 
-        x = leaky_relu(self.linear1(x))
-        x = x.view(-1, 3, 48, 48)
-        x = leaky_relu(self.conv1(x))
-        x = leaky_relu(self.conv2(x))
-        x = leaky_relu(self.conv3(x))
-        x = tanh(self.conv4(x))
-
+        x = relu(self.linear1(x))
+        x = x.view(-1, 512, 2, 2)
+        x = relu(self.convtranspose1(x)) # (256, 4, 4)
+        x = relu(self.convtranspose2(x)) # (128, 8, 8)
+        x = relu(self.convtranspose3(x)) # (128, 16, 16)
+        x = tanh(self.convtranspose4(x)) # (3, 32, 32)
+        
         # x = relu(self.linear1(x))
         # x = relu(self.linear2(x))
         # x = relu(self.linear3(x))
