@@ -56,10 +56,11 @@ class DiscriminatorCIFAR10(nn.Module):
         self.conv1 = Conv2d(3, 6, 3)
         self.conv2 = Conv2d(6, 12, 6)
         self.flatten = Flatten()
-        self.dropout = Dropout(p=0.9)
-        self.linear1 = Linear(7500, 1000)
-        self.linear2 = Linear(1000, 100)
-        self.linear3 = Linear(100, 2)
+        self.dropout = Dropout(p=0.2)
+        self.linear1 = Linear(7500, 2)
+        # self.linear1 = Linear(7500, 1000)
+        # self.linear2 = Linear(1000, 100)
+        # self.linear3 = Linear(100, 2)
 
         if inititialize_weights_xavier:
             self.apply(init_weights_xavier)
@@ -70,13 +71,13 @@ class DiscriminatorCIFAR10(nn.Module):
         x = leaky_relu(self.conv2(x))
         x = self.flatten(x)
         x = leaky_relu(self.linear1(x))
-        x = self.dropout(x)
-        x = leaky_relu(self.linear2(x))
-        x = self.dropout(x)
-        x = self.linear3(x)
+        # x = self.dropout(x)
+        # x = leaky_relu(self.linear2(x))
+        # x = self.dropout(x)
+        # x = self.linear3(x)
         x = sigmoid(x)
-        return x
 
+        return x
 
 
 def init_weights_xavier(m):
