@@ -1,5 +1,5 @@
 from torch import nn, Tensor, save, load
-from torch.nn import Linear, Dropout, Conv2d, Flatten, ConvTranspose2d
+from torch.nn import Linear, Dropout, Conv2d, Flatten, ConvTranspose2d, BatchNorm2d
 from torch.nn.functional import relu, sigmoid, tanh, leaky_relu
 import logging
 from torch.nn.init import xavier_uniform
@@ -20,10 +20,15 @@ class GeneratorCIFAR10(nn.Module):
         super().__init__()
         self.latent_vector_length = latent_vector_length
         self.linear1 = Linear(self.latent_vector_length, 2048)
+        self.batchnorm1 = BatchNorm2d()
         self.convtranspose1 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=2, stride=2)
+        self.batchnorm2 = BatchNorm2d()
         self.convtranspose2 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=2, stride=2)
+        self.batchnorm3 = BatchNorm2d()
         self.convtranspose3 = ConvTranspose2d(in_channels=128, out_channels=128, kernel_size=2, stride=2)
+        self.batchnorm4 = BatchNorm2d()
         self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=2)
+        self.batchnorm5 = BatchNorm2d()
 
         if inititialize_weights_xavier:
             self.apply(init_weights_xavier)
@@ -32,12 +37,17 @@ class GeneratorCIFAR10(nn.Module):
     def forward(self, x: Tensor):
 
         # print(f"x shape at begin: {x.shape}")
-        x = relu(self.linear1(x))
+        x = self.linear1(x)
+        x = relu(self.batchnorm1(x))
         x = x.view(-1, 512, 2, 2)
-        x = relu(self.convtranspose1(x)) # (256, 4, 4)
-        x = relu(self.convtranspose2(x)) # (128, 8, 8)
-        x = relu(self.convtranspose3(x)) # (128, 16, 16)
-        x = tanh(self.convtranspose4(x)) # (3, 32, 32)
+        x = self.convtranspose1(x) # (256, 4, 4)
+        x = relu(self.batchnorm2(x))
+        x = self.convtranspose2(x) # (128, 8, 8)
+        x = relu(self.batchnorm3(x))
+        x = self.convtranspose3(x) # (128, 16, 16)
+        x = relu(self.batchnorm4(x))
+        x = self.convtranspose4(x) # (3, 32, 32)
+        x = tanh(self.batchnorm5(x))
         x = x.view(-1, 3, 32, 32)
         # print(f"x shape at end: {x.shape}")
         
