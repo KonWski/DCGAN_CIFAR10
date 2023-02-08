@@ -93,7 +93,7 @@ def train_model(
 
     # optimizers
     optimizer_discriminator = Adam(discriminator.parameters(), lr=3e-4)
-    optimizer_generator = Adam(generator.parameters(), lr=3e-4)
+    optimizer_generator = Adam(generator.parameters(), lr=0.0002, betas=(0.5, 0.99))
     
     # criterion
     criterion = BCELoss()
