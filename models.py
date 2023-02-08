@@ -46,6 +46,7 @@ class GeneratorCIFAR10(nn.Module):
         x = relu(self.batchnorm3(x))
         x = self.convtranspose4(x) # (3, 32, 32)
         x = tanh(self.batchnorm4(x))
+        print(f"x shape: {x.shape}")
         x = x.view(-1, 3, 32, 32)
         # print(f"x shape at end: {x.shape}")
         
