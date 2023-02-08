@@ -2,7 +2,7 @@ from torch import nn, Tensor, save, load
 from torch.nn import Linear, Dropout, Conv2d, Flatten, ConvTranspose2d, BatchNorm2d
 from torch.nn.functional import relu, sigmoid, tanh, leaky_relu
 import logging
-from torch.nn.init import xavier_uniform
+from torch.nn.init import xavier_uniform, normal_
 
 class GeneratorCIFAR10(nn.Module):
     '''
@@ -46,8 +46,7 @@ class GeneratorCIFAR10(nn.Module):
         x = relu(self.batchnorm3(x))
         x = self.convtranspose4(x) # (3, 32, 32)
         x = tanh(self.batchnorm4(x))
-        print(f"x shape: {x.shape}")
-        x = x.view(-1, 3, 32, 32)
+
         # print(f"x shape at end: {x.shape}")
         
         return x
@@ -92,7 +91,8 @@ class DiscriminatorCIFAR10(nn.Module):
 def init_weights_xavier(m):
 
     if isinstance(m, Linear) or isinstance(m, Conv2d):
-        xavier_uniform(m.weight)
+        # xavier_uniform(m.weight)
+        normal_(m.weight, 0.0, 0.02)
 
 
 def save_checkpoint(checkpoint: dict, checkpoint_path: str):
