@@ -7,6 +7,7 @@ import logging
 from datetime import datetime
 from torchvision import transforms
 from evaluate import evaluate_model
+from torchvision.utils import save_image
 
 def train_model(
         device, 
@@ -92,7 +93,7 @@ def train_model(
     discriminator = DiscriminatorCIFAR10(init_discriminator_weights_xavier).to(device)
 
     # optimizers
-    optimizer_discriminator = Adam(discriminator.parameters(), lr=3e-4)
+    optimizer_discriminator = Adam(discriminator.parameters(), lr=0.0002)
     optimizer_generator = Adam(generator.parameters(), lr=0.0002, betas=(0.5, 0.99))
     
     # criterion
@@ -100,6 +101,9 @@ def train_model(
 
     # lowest losses for both models
     lowest_epoch_loss_generator = float("inf")
+
+    # example reference img
+    ref_noise = torch.randn(1, latent_vector_length)
 
     for epoch in range(n_epochs):
         
@@ -184,11 +188,18 @@ def train_model(
         logging.info(f"Epoch: {epoch}, loss_discriminator: {running_loss_discriminator}, loss_generator: {running_loss_generator}")
         logging.info(f"Epoch: {epoch}, epoch_acc_real: {epoch_acc_real}, epoch_acc_fake: {epoch_acc_fake}")        
 
+        ref_img = generator(ref_noise)[0]
+        ref_img = (ref_img * 0.5) + 0.5
+        ref_img = ref_img.permute(1, 2, 0)
+        save_image(ref_img, f"{checkpoints_dir}/ref_img_{epoch}.png")
+
         # save generator checkpoint
         # if running_loss_generator < lowest_epoch_loss_generator and abs(0.5 - epoch_acc_real) <= 0.05 \
         #     and abs(0.5 - epoch_acc_fake) <= 0.05:
         
-        if running_loss_generator < lowest_epoch_loss_generator:
+        # if running_loss_generator < lowest_epoch_loss_generator:
+        
+        if 1 != 1:
 
             lowest_epoch_loss_generator = min(lowest_epoch_loss_generator, running_loss_generator)
 
