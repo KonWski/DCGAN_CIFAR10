@@ -88,6 +88,7 @@ class DiscriminatorCIFAR10(nn.Module):
         x = leaky_relu(self.conv5(x), 0.02)
         x = self.flatten(x)
         x = sigmoid(x)
+        print(f"Discriminator output: {x.shape}")
 
         return x
 
