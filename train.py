@@ -104,6 +104,7 @@ def train_model(
 
     # example reference img
     ref_noise = torch.randn(1, latent_vector_length)
+    ref_noise = ref_noise.to(device)
 
     for epoch in range(n_epochs):
         
