@@ -52,7 +52,7 @@ class GeneratorCIFAR10(nn.Module):
         x = self.linear1(x)
         # x = x.view(-1, 512, 2, 2)
         x = x.view(-1, 1024, 2, 2)
-        x = relu(self.batchnorm0(x))
+        x = self.batchnorm0(x)
         x = self.convtranspose1(x) # (256, 4, 4)
         x = relu(self.batchnorm1(x))
         x = self.convtranspose2(x) # (128, 8, 8)
