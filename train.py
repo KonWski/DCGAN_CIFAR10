@@ -139,9 +139,7 @@ def train_model(
             # send tensors to device
             real_images = real_images.to(device)
             labels_real_images = labels_real_images.to(device)
-            # print(f"labels_real_images: {labels_real_images}")
             labels_fake_images = labels_fake_images.to(device)
-            # print(f"labels_fake_images: {labels_fake_images}")
 
             # generate images using random noise
             noise = noise.to(device)
@@ -149,19 +147,17 @@ def train_model(
 
             # classify real and fake images
             classified_real_images = discriminator(real_images)
-            # print(f"classified_real_images: {classified_real_images}")
             classified_generated_images = discriminator(generated_images)
-            # print(f"classified_generated_images: {classified_generated_images}")
 
             # correctly classified images
             running_corrects_real += torch.sum(torch.argmax(classified_real_images, 1) == torch.argmax(labels_real_images, 1)).item()
             running_corrects_fake += torch.sum(torch.argmax(classified_generated_images, 1) == torch.argmax(labels_fake_images, 1)).item()
 
             # calculate loss_0
-            loss_0 = criterion(classified_real_images, labels_real_images)
+            loss_0 = criterion(classified_real_images[:,1].view(-1), labels_real_images[:,1].view(-1))
 
             # calculate loss_1
-            loss_1 = criterion(classified_generated_images, labels_fake_images)
+            loss_1 = criterion(classified_generated_images[:,1].view(-1), labels_fake_images[:,1].view(-1))
 
             # update discriminator's weights
             loss_discriminator = (loss_0 + loss_1) / 2
@@ -175,7 +171,7 @@ def train_model(
 
             # generated_images = generator(noise)
             classified_generated_images = discriminator(generated_images)
-            loss_generator = criterion(classified_generated_images, labels_real_images)
+            loss_generator = criterion(classified_generated_images[:,1].view(-1), labels_real_images[:,1].view(-1))
             loss_generator.backward()
             optimizer_generator.step()
 
