@@ -67,8 +67,8 @@ class DiscriminatorCIFAR10(nn.Module):
         self.batchnorm2 = BatchNorm2d(12)
         self.conv3 = Conv2d(12, 24, 4, 2) # output dim: (24, 6, 6)
         self.batchnorm3 = BatchNorm2d(24)
-        self.conv4 = Conv2d(12, 48, 4, 2) # output dim: (48, 2, 2)
-        self.batchnorm4 = BatchNorm2d(24)
+        self.conv4 = Conv2d(24, 48, 4, 2) # output dim: (48, 2, 2)
+        self.batchnorm4 = BatchNorm2d(48)
         self.conv5 = Conv2d(12, 2, 1) # output dim: (2, 1, 1)
         self.flatten = Flatten()
 
