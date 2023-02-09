@@ -103,7 +103,7 @@ def train_model(
     lowest_epoch_loss_generator = float("inf")
 
     # example reference img
-    ref_noise = torch.randn(1, 512, 2, 2)
+    ref_noise = torch.randn(1, 2048)
     ref_noise = ref_noise.to(device)
 
     for epoch in range(n_epochs):
