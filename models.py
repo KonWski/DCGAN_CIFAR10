@@ -30,6 +30,7 @@ class GeneratorCIFAR10(nn.Module):
         # self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=2)
         # self.batchnorm4 = BatchNorm2d(3)
 
+        self.latent_vector_length = latent_vector_length
         self.linear1 = Linear(self.latent_vector_length, 4096)
         self.batchnorm0 = BatchNorm2d(1024)
         self.convtranspose1 = ConvTranspose2d(in_channels=1024, out_channels=512, kernel_size=2, stride=2)
