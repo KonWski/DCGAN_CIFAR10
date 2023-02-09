@@ -58,7 +58,7 @@ class GeneratorCIFAR10(nn.Module):
         x = self.convtranspose3(x) # (128, 16, 16)
         x = relu(self.batchnorm3(x))
         x = self.convtranspose4(x) # (3, 32, 32)
-        x = tanh(self.batchnorm4(x))
+        x = tanh(x)
 
         # print(f"x shape at end: {x.shape}")
         
