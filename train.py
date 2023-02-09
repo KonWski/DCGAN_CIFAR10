@@ -133,7 +133,9 @@ def train_model(
             # send tensors to device
             real_images = real_images.to(device)
             labels_real_images = labels_real_images.to(device)
+            print(f"labels_real_images: {labels_real_images}")
             labels_fake_images = labels_fake_images.to(device)
+            print(f"labels_fake_images: {labels_fake_images}")
 
             # generate images using random noise
             noise = noise.to(device)
@@ -141,8 +143,10 @@ def train_model(
 
             # classify real and fake images
             classified_real_images = discriminator(real_images)
+            print(f"classified_real_images: {classified_real_images}")
             classified_generated_images = discriminator(generated_images)
-
+            print(f"classified_generated_images: {classified_generated_images}")
+            break
             # correctly classified images
             running_corrects_real += torch.sum(torch.argmax(classified_real_images, 1) == torch.argmax(labels_real_images, 1)).item()
             running_corrects_fake += torch.sum(torch.argmax(classified_generated_images, 1) == torch.argmax(labels_fake_images, 1)).item()
