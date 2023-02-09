@@ -74,7 +74,7 @@ class GeneratorCIFAR10(nn.Module):
         x = self.convtranspose4(x) # (3, 32, 32)
         x = tanh(x)
 
-        # print(f"x shape at end: {x.shape}")
+        print(f"x shape at end: {x.shape}")
         
         return x
 
