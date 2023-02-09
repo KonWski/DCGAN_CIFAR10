@@ -61,28 +61,32 @@ class DiscriminatorCIFAR10(nn.Module):
     '''
     def __init__(self, inititialize_weights_xavier: bool = False):
         super().__init__()
-        self.conv1 = Conv2d(3, 6, 3)
-        self.conv2 = Conv2d(6, 12, 6)
+        self.conv1 = Conv2d(3, 6, 3) # output dim: (3, 30, 30)
+        self.batchnorm1 = BatchNorm2d(6)
+        self.conv2 = Conv2d(6, 12, 4, 2) # output dim: (12, 14, 14)
+        self.batchnorm2 = BatchNorm2d(12)
+        self.conv3 = Conv2d(12, 24, 4, 2) # output dim: (24, 6, 6)
+        self.batchnorm3 = BatchNorm2d(24)
+        self.conv4 = Conv2d(12, 48, 4, 2) # output dim: (48, 2, 2)
+        self.batchnorm4 = BatchNorm2d(24)
+        self.conv5 = Conv2d(12, 2, 1) # output dim: (2, 1, 1)
         self.flatten = Flatten()
-        self.dropout = Dropout(p=0.2)
-        self.linear1 = Linear(7500, 2)
-        # self.linear1 = Linear(7500, 1000)
-        # self.linear2 = Linear(1000, 100)
-        # self.linear3 = Linear(100, 2)
 
         if inititialize_weights_xavier:
             self.apply(init_weights_xavier)
 
     def forward(self, x: Tensor):
 
-        x = leaky_relu(self.conv1(x))
-        x = leaky_relu(self.conv2(x))
+        x = self.conv1(x)
+        x = leaky_relu(self.batchnorm1(x), 0.02)
+        x = self.conv2(x)
+        x = leaky_relu(self.batchnorm2(x), 0.02)
+        x = self.conv3(x)
+        x = leaky_relu(self.batchnorm3(x), 0.02)
+        x = self.conv4(x)
+        x = leaky_relu(self.batchnorm4(x), 0.02)
+        x = leaky_relu(self.conv5(x), 0.02)
         x = self.flatten(x)
-        x = self.linear1(x)
-        # x = self.dropout(x)
-        # x = leaky_relu(self.linear2(x))
-        # x = self.dropout(x)
-        # x = self.linear3(x)
         x = sigmoid(x)
 
         return x
