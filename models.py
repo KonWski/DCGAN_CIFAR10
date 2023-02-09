@@ -18,8 +18,8 @@ class GeneratorCIFAR10(nn.Module):
     def __init__(self, latent_vector_length: int, inititialize_weights_xavier: bool = False):
 
         super().__init__()
-        self.latent_vector_length = latent_vector_length
-        self.linear1 = Linear(self.latent_vector_length, 2048)
+        # self.latent_vector_length = latent_vector_length
+        # self.linear1 = Linear(self.latent_vector_length, 2048)
         self.convtranspose1 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=2, stride=2)
         self.batchnorm1 = BatchNorm2d(256)
         self.convtranspose2 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=2, stride=2)
@@ -36,8 +36,10 @@ class GeneratorCIFAR10(nn.Module):
     def forward(self, x: Tensor):
 
         # print(f"x shape at begin: {x.shape}")
-        x = relu(self.linear1(x))
-        x = x.view(-1, 512, 2, 2)
+        # x = relu(self.linear1(x))
+        # x = x.view(-1, 512, 2, 2)
+
+
         x = self.convtranspose1(x) # (256, 4, 4)
         x = relu(self.batchnorm1(x))
         x = self.convtranspose2(x) # (128, 8, 8)
