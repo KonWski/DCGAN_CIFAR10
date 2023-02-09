@@ -51,7 +51,7 @@ class GeneratorCIFAR10(nn.Module):
         self.batchnorm2 = BatchNorm2d(256)
         self.convtranspose3 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=4, stride=2)
         self.batchnorm3 = BatchNorm2d(128)
-        self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=2)
+        self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=1)
         self.batchnorm4 = BatchNorm2d(3)
 
         if inititialize_weights_xavier:
@@ -74,7 +74,7 @@ class GeneratorCIFAR10(nn.Module):
         x = self.convtranspose4(x) # (3, 32, 32)
         x = tanh(x)
 
-        print(f"x shape at end: {x.shape}")
+        # print(f"x shape at end: {x.shape}")
         
         return x
 
