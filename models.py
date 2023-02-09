@@ -30,29 +30,29 @@ class GeneratorCIFAR10(nn.Module):
         # self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=2)
         # self.batchnorm4 = BatchNorm2d(3)
 
-        self.latent_vector_length = latent_vector_length
-        self.linear1 = Linear(self.latent_vector_length, 4096)
-        self.batchnorm0 = BatchNorm2d(1024)
-        self.convtranspose1 = ConvTranspose2d(in_channels=1024, out_channels=512, kernel_size=2, stride=2)
-        self.batchnorm1 = BatchNorm2d(512)
-        self.convtranspose2 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=2, stride=2)
-        self.batchnorm2 = BatchNorm2d(256)
-        self.convtranspose3 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=2, stride=2)
-        self.batchnorm3 = BatchNorm2d(128)
-        self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=2)
-        self.batchnorm4 = BatchNorm2d(3)
-
         # self.latent_vector_length = latent_vector_length
         # self.linear1 = Linear(self.latent_vector_length, 4096)
         # self.batchnorm0 = BatchNorm2d(1024)
-        # self.convtranspose1 = ConvTranspose2d(in_channels=1024, out_channels=512, kernel_size=4, stride=2)
+        # self.convtranspose1 = ConvTranspose2d(in_channels=1024, out_channels=512, kernel_size=2, stride=2)
         # self.batchnorm1 = BatchNorm2d(512)
-        # self.convtranspose2 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=4, stride=2)
+        # self.convtranspose2 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=2, stride=2)
         # self.batchnorm2 = BatchNorm2d(256)
-        # self.convtranspose3 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=4, stride=2)
+        # self.convtranspose3 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=2, stride=2)
         # self.batchnorm3 = BatchNorm2d(128)
         # self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=2)
         # self.batchnorm4 = BatchNorm2d(3)
+
+        self.latent_vector_length = latent_vector_length
+        self.linear1 = Linear(self.latent_vector_length, 4096)
+        self.batchnorm0 = BatchNorm2d(1024)
+        self.convtranspose1 = ConvTranspose2d(in_channels=1024, out_channels=512, kernel_size=4, stride=2)
+        self.batchnorm1 = BatchNorm2d(512)
+        self.convtranspose2 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=4, stride=2)
+        self.batchnorm2 = BatchNorm2d(256)
+        self.convtranspose3 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=4, stride=2)
+        self.batchnorm3 = BatchNorm2d(128)
+        self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=2)
+        self.batchnorm4 = BatchNorm2d(3)
 
         if inititialize_weights_xavier:
             self.apply(init_weights_xavier)
@@ -74,7 +74,7 @@ class GeneratorCIFAR10(nn.Module):
         x = self.convtranspose4(x) # (3, 32, 32)
         x = tanh(x)
 
-        # print(f"x shape at end: {x.shape}")
+        print(f"x shape at end: {x.shape}")
         
         return x
 
