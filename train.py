@@ -189,9 +189,11 @@ def train_model(
         logging.info(f"Epoch: {epoch}, loss_discriminator: {running_loss_discriminator}, loss_generator: {running_loss_generator}")
         logging.info(f"Epoch: {epoch}, epoch_acc_real: {epoch_acc_real}, epoch_acc_fake: {epoch_acc_fake}")        
 
-        ref_img = generator(ref_noise)[0]
+        ref_img = generator(ref_noise)
+        print(f"ref_img shape after gen: {ref_img.shape}")
+        ref_img = ref_img[0]
         ref_img = (ref_img * 0.5) + 0.5
-        ref_img = ref_img.permute(1, 2, 0)
+        # ref_img = ref_img.permute(1, 2, 0)
         save_image(ref_img, f"{checkpoints_dir}/ref_img_{epoch}.png")
 
         # save generator checkpoint
