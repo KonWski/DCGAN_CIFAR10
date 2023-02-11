@@ -3,6 +3,7 @@ import torch
 from models import DiscriminatorCIFAR10, GeneratorCIFAR10, save_checkpoint
 from torch.optim import Adam
 from torch.nn import BCELoss
+from torch.nn.functional import dropout
 import logging
 from datetime import datetime
 from torchvision import transforms
@@ -130,12 +131,13 @@ def train_model(
             # labels
             labels_real_images = torch.ones(batch_size)
             noisy_labels_real_images = labels_real_images - (torch.rand(batch_size) * 0.1)
+            # noisy_labels_real_images = dropout(noisy_labels_real_images, p=0.05)
             labels_fake_images = torch.zeros(batch_size)
             noisy_labels_fake_images = labels_fake_images + (torch.rand(batch_size) * 0.1)
 
             # send tensors to device
             real_images = real_images.to(device)
-            # labels_real_images = labels_real_images.to(device)
+            labels_real_images = labels_real_images.to(device)
             # labels_fake_images = labels_fake_images.to(device)
             noisy_labels_real_images = noisy_labels_real_images.to(device)
             noisy_labels_fake_images = noisy_labels_fake_images.to(device)
@@ -185,7 +187,7 @@ def train_model(
             # generated_images = generator(noise)
             classified_generated_images = discriminator(generated_images).view(-1)
 
-            loss_generator = criterion(classified_generated_images, noisy_labels_real_images)
+            loss_generator = criterion(classified_generated_images, labels_real_images)
             optimizer_generator.zero_grad()
             loss_generator.backward()
             optimizer_generator.step()
