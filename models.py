@@ -134,8 +134,7 @@ class DiscriminatorCIFAR10(nn.Module):
     def forward(self, x: Tensor):
         
         # print(f"x shape before conv1: {x.shape}")
-        x = self.conv1(x)
-        x = leaky_relu(self.batchnorm1(x), 0.02)
+        x = leaky_relu(self.conv1(x), 0.02)
         # print(f"x shape before conv2: {x.shape}")
         x = self.conv2(x)
         x = leaky_relu(self.batchnorm2(x), 0.02)
