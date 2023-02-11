@@ -72,7 +72,7 @@ class GeneratorCIFAR10(nn.Module):
 
 
 
-        # print(f"x shape at end: {x.shape}")
+        print(f"x shape at end: {x.shape}")
         
         return x
 
