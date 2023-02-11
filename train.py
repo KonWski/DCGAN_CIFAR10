@@ -136,9 +136,6 @@ def train_model(
             labels_fake_images = torch.ones(real_images_size)
             labels_real_images = torch.zeros(real_images_size)
 
-            # zero grad
-            optimizer_discriminator.zero_grad()
-
             # send tensors to device
             real_images = real_images.to(device)
             labels_real_images = labels_real_images.to(device)
@@ -168,17 +165,18 @@ def train_model(
 
             # update discriminator's weights
             loss_discriminator = (loss_0 + loss_1) / 2
+            optimizer_discriminator.zero_grad()
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
 
             ##########################
             # Generator's training
             ##########################
-            optimizer_generator.zero_grad()
 
             # generated_images = generator(noise)
             classified_generated_images = discriminator(generated_images).view(-1)
             loss_generator = criterion(classified_generated_images, labels_real_images)
+            optimizer_generator.zero_grad()
             loss_generator.backward()
             optimizer_generator.step()
 
