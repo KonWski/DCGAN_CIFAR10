@@ -171,6 +171,7 @@ def train_model(
 
             # generated_images = generator(noise)
             classified_generated_images = discriminator(generated_images).view(-1)
+
             loss_generator = criterion(classified_generated_images, labels_real_images)
             optimizer_generator.zero_grad()
             loss_generator.backward()
@@ -181,9 +182,9 @@ def train_model(
             running_sum_fake_proba_G_train += classified_generated_images.sum().item()
 
         # epoch statistics
-        epoch_mean_proba_real = round(running_sum_real_proba / len_dataset)
-        epoch_mean_proba_fake_D_train = round(running_sum_fake_proba_D_train / len_dataset)
-        epoch_mean_proba_fake_G_train = round(running_sum_fake_proba_G_train / len_dataset)
+        epoch_mean_proba_real = round(running_sum_real_proba / len_dataset, 4)
+        epoch_mean_proba_fake_D_train = round(running_sum_fake_proba_D_train / len_dataset, 4)
+        epoch_mean_proba_fake_G_train = round(running_sum_fake_proba_G_train / len_dataset, 4)
 
         logging.info(f"Epoch: {epoch}, loss_discriminator: {running_loss_discriminator}, loss_generator: {running_loss_generator}")
         logging.info(f"Epoch: {epoch}, epoch_mean_proba_real: {epoch_mean_proba_real}, " \
