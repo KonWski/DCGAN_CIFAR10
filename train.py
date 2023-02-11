@@ -94,7 +94,7 @@ def train_model(
 
     # optimizers
     optimizer_discriminator = Adam(discriminator.parameters(), lr=0.0002)
-    optimizer_generator = Adam(generator.parameters(), lr=0.0002, betas=(0.5, 0.99))
+    optimizer_generator = Adam(generator.parameters(), lr=0.0002, betas=(0.5, 0.999))
     
     # criterion
     criterion = BCELoss()
@@ -128,11 +128,14 @@ def train_model(
             noise = torch.randn(real_images_size, latent_vector_length)
 
             # labels
-            tensor_zeros = torch.full((real_images_size, 1), 0, dtype=torch.float)
-            tensor_ones = torch.full((real_images_size, 1), 1, dtype=torch.float)
-            labels_real_images = torch.cat((tensor_zeros, tensor_ones), dim=1).to(device)
-            labels_fake_images = torch.cat((tensor_ones, tensor_zeros), dim=1).to(device)
-            
+            # tensor_zeros = torch.full((real_images_size, 1), 0, dtype=torch.float)
+            # tensor_ones = torch.full((real_images_size, 1), 1, dtype=torch.float)
+            # labels_real_images = torch.cat((tensor_zeros, tensor_ones), dim=1).to(device)
+            # labels_fake_images = torch.cat((tensor_ones, tensor_zeros), dim=1).to(device)
+
+            labels_fake_images = torch.full((real_images_size, 1), 0, dtype=torch.float)
+            labels_real_images = torch.full((real_images_size, 1), 1, dtype=torch.float)
+
             # zero grad
             optimizer_discriminator.zero_grad()
 
@@ -150,8 +153,8 @@ def train_model(
             classified_generated_images = discriminator(generated_images)
 
             # correctly classified images
-            running_corrects_real += torch.sum(torch.argmax(classified_real_images, 1) == torch.argmax(labels_real_images, 1)).item()
-            running_corrects_fake += torch.sum(torch.argmax(classified_generated_images, 1) == torch.argmax(labels_fake_images, 1)).item()
+            # running_corrects_real += torch.sum(torch.argmax(classified_real_images, 1) == torch.argmax(labels_real_images, 1)).item()
+            # running_corrects_fake += torch.sum(torch.argmax(classified_generated_images, 1) == torch.argmax(labels_fake_images, 1)).item()
 
             # calculate loss_0
             loss_0 = criterion(classified_real_images, labels_real_images)
