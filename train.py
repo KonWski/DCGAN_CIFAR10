@@ -111,8 +111,9 @@ def train_model(
         # calculated parameters
         running_loss_discriminator = 0.0
         running_loss_generator = 0.0
-        running_corrects_real = 0
-        running_corrects_fake = 0
+        running_sum_real_proba = 0.0
+        running_sum_fake_proba_D_train = 0.0
+        running_sum_fake_proba_G_train = 0.0
 
         for id, batch in enumerate(loader, 0):
 
@@ -122,19 +123,13 @@ def train_model(
 
             # inputs for discriminator and generator
             real_images = batch[0]
-            real_images_size = real_images.shape[0]
+            batch_size = real_images.shape[0]
 
-            # noise = torch.randn(real_images_size, latent_vector_length)
-            noise = torch.randn(real_images_size, latent_vector_length)
+            noise = torch.randn(batch_size, latent_vector_length)
 
             # labels
-            # tensor_zeros = torch.full((real_images_size, 1), 0, dtype=torch.float)
-            # tensor_ones = torch.full((real_images_size, 1), 1, dtype=torch.float)
-            # labels_real_images = torch.cat((tensor_zeros, tensor_ones), dim=1).to(device)
-            # labels_fake_images = torch.cat((tensor_ones, tensor_zeros), dim=1).to(device)
-
-            labels_fake_images = torch.ones(real_images_size)
-            labels_real_images = torch.zeros(real_images_size)
+            labels_fake_images = torch.ones(batch_size)
+            labels_real_images = torch.zeros(batch_size)
 
             # send tensors to device
             real_images = real_images.to(device)
@@ -149,13 +144,12 @@ def train_model(
             classified_real_images = discriminator(real_images).view(-1)
             classified_generated_images = discriminator(generated_images).view(-1)
 
+            # collect epoch statistics
+            running_sum_real_proba += classified_real_images.sum().item()
+            running_sum_fake_proba_D_train += classified_generated_images.sum().item()
+
             # print(f"classified_real_images shape: {classified_real_images.shape}")
             # print(f"labels_real_images: {labels_real_images.shape}")
-
-
-            # correctly classified images
-            # running_corrects_real += torch.sum(torch.argmax(classified_real_images, 1) == torch.argmax(labels_real_images, 1)).item()
-            # running_corrects_fake += torch.sum(torch.argmax(classified_generated_images, 1) == torch.argmax(labels_fake_images, 1)).item()
 
             # calculate loss_0
             loss_0 = criterion(classified_real_images, labels_real_images)
@@ -180,16 +174,18 @@ def train_model(
             loss_generator.backward()
             optimizer_generator.step()
 
-            # iteration statistics
-            running_loss_discriminator += loss_discriminator.item()
-            running_loss_generator += loss_generator.item()
+            # collect epoch statistics
+            running_sum_fake_proba_G_train += classified_generated_images.sum().item()
 
         # epoch statistics
-        epoch_acc_real = running_corrects_real / len_dataset
-        epoch_acc_fake = running_corrects_fake / len_dataset
+        epoch_mean_proba_real = running_sum_real_proba / len_dataset
+        epoch_mean_proba_fake_D_train = running_sum_fake_proba_D_train / len_dataset
+        epoch_mean_proba_fake_G_train = running_sum_fake_proba_G_train / len_dataset
 
         logging.info(f"Epoch: {epoch}, loss_discriminator: {running_loss_discriminator}, loss_generator: {running_loss_generator}")
-        logging.info(f"Epoch: {epoch}, epoch_acc_real: {epoch_acc_real}, epoch_acc_fake: {epoch_acc_fake}")        
+        logging.info(f"Epoch: {epoch}, epoch_mean_proba_real: {epoch_mean_proba_real}, \
+            epoch_mean_proba_fake_D_train: {epoch_mean_proba_fake_D_train}, \
+            epoch_mean_proba_fake_G_train: {epoch_mean_proba_fake_G_train}")
 
         ref_img = generator(ref_noise)
         print(f"ref_img shape after gen: {ref_img.shape}")
