@@ -46,8 +46,8 @@ class GeneratorCIFAR10(nn.Module):
 
         self.latent_vector_length = latent_vector_length
         self.linear1 = Linear(self.latent_vector_length, 16384)
-        self.batchnorm0 = BatchNorm2d(1024)
-        self.convtranspose1 = ConvTranspose2d(in_channels=1024, out_channels=512, kernel_size=5, stride=1) # out (512, 8, 8)
+        self.batchnorm0 = BatchNorm2d(512)
+        self.convtranspose1 = ConvTranspose2d(in_channels=512, out_channels=512, kernel_size=5, stride=1) # out (512, 8, 8)
         self.batchnorm1 = BatchNorm2d(512)
         self.convtranspose2 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=5, stride=1) # out (256, 12, 12)
         self.batchnorm2 = BatchNorm2d(256)
@@ -133,51 +133,6 @@ class GeneratorCIFAR10(nn.Module):
         return x
 
 
-# class DiscriminatorCIFAR10(nn.Module):
-#     '''
-#     Classifies image as fake (created by generator) or real (sampled from original dataset)
-
-#     inititialize_weights_xavier: bool
-#         init weigts of layers using Xavier weight initialisation
-#     '''
-#     def __init__(self, inititialize_weights_xavier: bool = False):
-#         super().__init__()
-#         self.conv1 = Conv2d(3, 6, 3) # output dim: (3, 30, 30)
-#         self.batchnorm1 = BatchNorm2d(6)
-#         self.conv2 = Conv2d(6, 12, 4, 2) # output dim: (12, 14, 14)
-#         self.batchnorm2 = BatchNorm2d(12)
-#         self.conv3 = Conv2d(12, 24, 4, 2) # output dim: (24, 6, 6)
-#         self.batchnorm3 = BatchNorm2d(24)
-#         self.conv4 = Conv2d(24, 48, 4, 2) # output dim: (48, 2, 2)
-#         self.batchnorm4 = BatchNorm2d(48)
-#         self.conv5 = Conv2d(48, 1, 2) # output dim: (1, 2, 1)
-#         self.flatten = Flatten()
-
-#         if inititialize_weights_xavier:
-#             self.apply(init_weights_xavier)
-
-#     def forward(self, x: Tensor):
-        
-#         # print(f"x shape before conv1: {x.shape}")
-#         x = leaky_relu(self.conv1(x), 0.02)
-#         # print(f"x shape before conv2: {x.shape}")
-#         x = self.conv2(x)
-#         x = leaky_relu(self.batchnorm2(x), 0.02)
-#         # print(f"x shape before conv3: {x.shape}")
-#         x = self.conv3(x)
-#         x = leaky_relu(self.batchnorm3(x), 0.02)
-#         # print(f"x shape before conv4: {x.shape}")
-#         x = self.conv4(x)
-#         x = leaky_relu(self.batchnorm4(x), 0.02)
-#         # print(f"x shape before conv5: {x.shape}")
-#         x = sigmoid(self.conv5(x))
-#         # print(f"x shape after conv5: {x.shape}")
-#         # x = self.flatten(x)
-#         # print(f"x shape after flatten: {x.shape}")
-
-#         return x
-
-
 class DiscriminatorCIFAR10(nn.Module):
     '''
     Classifies image as fake (created by generator) or real (sampled from original dataset)
@@ -187,15 +142,15 @@ class DiscriminatorCIFAR10(nn.Module):
     '''
     def __init__(self, inititialize_weights_xavier: bool = False):
         super().__init__()
-        self.conv1 = Conv2d(3, 128, 3) # output dim: (3, 30, 30)
-        self.batchnorm1 = BatchNorm2d(128)
-        self.conv2 = Conv2d(128, 256, 4, 2) # output dim: (12, 14, 14)
-        self.batchnorm2 = BatchNorm2d(256)
-        self.conv3 = Conv2d(256, 512, 4, 2) # output dim: (24, 6, 6)
-        self.batchnorm3 = BatchNorm2d(512)
-        self.conv4 = Conv2d(512, 1024, 4, 2) # output dim: (48, 2, 2)
-        self.batchnorm4 = BatchNorm2d(1024)
-        self.conv5 = Conv2d(1024, 1, 2) # output dim: (1, 2, 1)
+        self.conv1 = Conv2d(3, 6, 3) # output dim: (3, 30, 30)
+        self.batchnorm1 = BatchNorm2d(6)
+        self.conv2 = Conv2d(6, 12, 4, 2) # output dim: (12, 14, 14)
+        self.batchnorm2 = BatchNorm2d(12)
+        self.conv3 = Conv2d(12, 24, 4, 2) # output dim: (24, 6, 6)
+        self.batchnorm3 = BatchNorm2d(24)
+        self.conv4 = Conv2d(24, 48, 4, 2) # output dim: (48, 2, 2)
+        self.batchnorm4 = BatchNorm2d(48)
+        self.conv5 = Conv2d(48, 1, 2) # output dim: (1, 2, 1)
         self.flatten = Flatten()
 
         if inititialize_weights_xavier:
@@ -221,6 +176,7 @@ class DiscriminatorCIFAR10(nn.Module):
         # print(f"x shape after flatten: {x.shape}")
 
         return x
+
 
 
 def init_weights_xavier(m):
