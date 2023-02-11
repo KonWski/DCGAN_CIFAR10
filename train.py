@@ -129,12 +129,16 @@ def train_model(
 
             # labels
             labels_real_images = torch.ones(batch_size)
+            noisy_labels_real_images = labels_real_images - (torch.rand(batch_size) * 0.1)
             labels_fake_images = torch.zeros(batch_size)
+            noisy_labels_fake_images = labels_fake_images + (torch.rand(batch_size) * 0.1)
 
             # send tensors to device
             real_images = real_images.to(device)
-            labels_real_images = labels_real_images.to(device)
-            labels_fake_images = labels_fake_images.to(device)
+            # labels_real_images = labels_real_images.to(device)
+            # labels_fake_images = labels_fake_images.to(device)
+            noisy_labels_real_images = noisy_labels_real_images.to(device)
+            noisy_labels_fake_images = noisy_labels_fake_images.to(device)
 
             # generate images using random noise
             noise = noise.to(device)
@@ -159,10 +163,10 @@ def train_model(
             # print(f"labels_real_images: {labels_fake_images}")
 
             # calculate loss_0
-            loss_0 = criterion(classified_real_images, labels_real_images)
+            loss_0 = criterion(classified_real_images, noisy_labels_real_images)
 
             # calculate loss_1
-            loss_1 = criterion(classified_generated_images, labels_fake_images)
+            loss_1 = criterion(classified_generated_images, noisy_labels_fake_images)
 
             # update discriminator's weights
             loss_discriminator = loss_0 + loss_1
@@ -181,7 +185,7 @@ def train_model(
             # generated_images = generator(noise)
             classified_generated_images = discriminator(generated_images).view(-1)
 
-            loss_generator = criterion(classified_generated_images, labels_real_images)
+            loss_generator = criterion(classified_generated_images, noisy_labels_real_images)
             optimizer_generator.zero_grad()
             loss_generator.backward()
             optimizer_generator.step()
