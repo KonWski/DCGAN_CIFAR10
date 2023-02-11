@@ -152,8 +152,8 @@ def train_model(
             classified_real_images = discriminator(real_images).view(-1)
             classified_generated_images = discriminator(generated_images).view(-1)
 
-            print(f"classified_real_images shape: {classified_real_images.shape}")
-            print(f"labels_real_images: {labels_real_images.shape}")
+            # print(f"classified_real_images shape: {classified_real_images.shape}")
+            # print(f"labels_real_images: {labels_real_images.shape}")
 
 
             # correctly classified images
