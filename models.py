@@ -188,13 +188,13 @@ class DiscriminatorCIFAR10(nn.Module):
     def __init__(self, inititialize_weights_xavier: bool = False):
         super().__init__()
         self.conv1 = Conv2d(3, 128, 3) # output dim: (3, 30, 30)
-        self.batchnorm1 = BatchNorm2d(6)
+        self.batchnorm1 = BatchNorm2d(128)
         self.conv2 = Conv2d(128, 256, 4, 2) # output dim: (12, 14, 14)
-        self.batchnorm2 = BatchNorm2d(12)
+        self.batchnorm2 = BatchNorm2d(256)
         self.conv3 = Conv2d(256, 512, 4, 2) # output dim: (24, 6, 6)
-        self.batchnorm3 = BatchNorm2d(24)
+        self.batchnorm3 = BatchNorm2d(512)
         self.conv4 = Conv2d(512, 1024, 4, 2) # output dim: (48, 2, 2)
-        self.batchnorm4 = BatchNorm2d(48)
+        self.batchnorm4 = BatchNorm2d(1024)
         self.conv5 = Conv2d(1024, 1, 2) # output dim: (1, 2, 1)
         self.flatten = Flatten()
 
