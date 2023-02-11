@@ -132,13 +132,17 @@ class DiscriminatorCIFAR10(nn.Module):
             self.apply(init_weights_xavier)
 
     def forward(self, x: Tensor):
-
+        
+        print(f"x shape before conv1: {x.shape}")
         x = self.conv1(x)
         x = leaky_relu(self.batchnorm1(x), 0.02)
+        print(f"x shape before conv2: {x.shape}")
         x = self.conv2(x)
         x = leaky_relu(self.batchnorm2(x), 0.02)
+        print(f"x shape before conv3: {x.shape}")
         x = self.conv3(x)
         x = leaky_relu(self.batchnorm3(x), 0.02)
+        print(f"x shape before conv4: {x.shape}")
         x = self.conv4(x)
         x = leaky_relu(self.batchnorm4(x), 0.02)
         print(f"x shape before conv5: {x.shape}")
