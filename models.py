@@ -18,17 +18,17 @@ class GeneratorCIFAR10(nn.Module):
     def __init__(self, latent_vector_length: int, inititialize_weights_xavier: bool = False):
 
         super().__init__()
-        # self.latent_vector_length = latent_vector_length
-        # self.linear1 = Linear(self.latent_vector_length, 2048)
-        # self.batchnorm0 = BatchNorm2d(512)
-        # self.convtranspose1 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=2, stride=2)
-        # self.batchnorm1 = BatchNorm2d(256)
-        # self.convtranspose2 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=2, stride=2)
-        # self.batchnorm2 = BatchNorm2d(128)
-        # self.convtranspose3 = ConvTranspose2d(in_channels=128, out_channels=128, kernel_size=2, stride=2)
-        # self.batchnorm3 = BatchNorm2d(128)
-        # self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=2)
-        # self.batchnorm4 = BatchNorm2d(3)
+        self.latent_vector_length = latent_vector_length
+        self.linear1 = Linear(self.latent_vector_length, 2048)
+        self.batchnorm0 = BatchNorm2d(512)
+        self.convtranspose1 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=2, stride=2)
+        self.batchnorm1 = BatchNorm2d(256)
+        self.convtranspose2 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=2, stride=2)
+        self.batchnorm2 = BatchNorm2d(128)
+        self.convtranspose3 = ConvTranspose2d(in_channels=128, out_channels=128, kernel_size=2, stride=2)
+        self.batchnorm3 = BatchNorm2d(128)
+        self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=2)
+        self.batchnorm4 = BatchNorm2d(3)
 
         # self.latent_vector_length = latent_vector_length
         # self.linear1 = Linear(self.latent_vector_length, 4096)
@@ -42,17 +42,17 @@ class GeneratorCIFAR10(nn.Module):
         # self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=2, stride=2)
         # self.batchnorm4 = BatchNorm2d(3)
 
-        self.latent_vector_length = latent_vector_length
-        self.linear1 = Linear(self.latent_vector_length, 4096)
-        self.batchnorm0 = BatchNorm2d(1024)
-        self.convtranspose1 = ConvTranspose2d(in_channels=1024, out_channels=512, kernel_size=4, stride=2)
-        self.batchnorm1 = BatchNorm2d(512)
-        self.convtranspose2 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=4, stride=2)
-        self.batchnorm2 = BatchNorm2d(256)
-        self.convtranspose3 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=4, stride=2)
-        self.batchnorm3 = BatchNorm2d(128)
-        self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=3, stride=1)
-        self.batchnorm4 = BatchNorm2d(3)
+        # self.latent_vector_length = latent_vector_length
+        # self.linear1 = Linear(self.latent_vector_length, 4096)
+        # self.batchnorm0 = BatchNorm2d(1024)
+        # self.convtranspose1 = ConvTranspose2d(in_channels=1024, out_channels=512, kernel_size=4, stride=2)
+        # self.batchnorm1 = BatchNorm2d(512)
+        # self.convtranspose2 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=4, stride=2)
+        # self.batchnorm2 = BatchNorm2d(256)
+        # self.convtranspose3 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=4, stride=2)
+        # self.batchnorm3 = BatchNorm2d(128)
+        # self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=3, stride=1)
+        # self.batchnorm4 = BatchNorm2d(3)
 
         # self.latent_vector_length = latent_vector_length
         # self.linear1 = Linear(self.latent_vector_length, 16384)
