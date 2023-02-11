@@ -163,6 +163,8 @@ def train_model(
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
 
+            running_loss_discriminator += loss_discriminator.item()
+
             ##########################
             # Generator's training
             ##########################
@@ -175,17 +177,18 @@ def train_model(
             optimizer_generator.step()
 
             # collect epoch statistics
+            running_loss_generator += loss_generator.item()
             running_sum_fake_proba_G_train += classified_generated_images.sum().item()
 
         # epoch statistics
-        epoch_mean_proba_real = running_sum_real_proba / len_dataset
-        epoch_mean_proba_fake_D_train = running_sum_fake_proba_D_train / len_dataset
-        epoch_mean_proba_fake_G_train = running_sum_fake_proba_G_train / len_dataset
+        epoch_mean_proba_real = round(running_sum_real_proba / len_dataset)
+        epoch_mean_proba_fake_D_train = round(running_sum_fake_proba_D_train / len_dataset)
+        epoch_mean_proba_fake_G_train = round(running_sum_fake_proba_G_train / len_dataset)
 
         logging.info(f"Epoch: {epoch}, loss_discriminator: {running_loss_discriminator}, loss_generator: {running_loss_generator}")
-        logging.info(f"Epoch: {epoch}, epoch_mean_proba_real: {epoch_mean_proba_real}, \
-            epoch_mean_proba_fake_D_train: {epoch_mean_proba_fake_D_train}, \
-            epoch_mean_proba_fake_G_train: {epoch_mean_proba_fake_G_train}")
+        logging.info(f"Epoch: {epoch}, epoch_mean_proba_real: {epoch_mean_proba_real}, " \
+            f"epoch_mean_proba_fake_D_train: {epoch_mean_proba_fake_D_train}, " \
+            f"epoch_mean_proba_fake_G_train: {epoch_mean_proba_fake_G_train}")
 
         ref_img = generator(ref_noise)
         print(f"ref_img shape after gen: {ref_img.shape}")
