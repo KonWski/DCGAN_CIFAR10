@@ -37,7 +37,6 @@ class GeneratorCIFAR10(nn.Module):
         self.batchnorm0 = BatchNorm2d(1024)
         self.convtranspose1 = ConvTranspose2d(in_channels=1024, out_channels=512, kernel_size=5, stride=1) # out (512, 8, 8)
         self.batchnorm1 = BatchNorm2d(512)
-        # something's wrong here
         self.convtranspose2 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=6, stride=1) # out (256, 13, 13)
         self.batchnorm2 = BatchNorm2d(256)
         self.convtranspose3 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=5, stride=2) # out (128, 28, 28)
