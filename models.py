@@ -146,7 +146,7 @@ class DiscriminatorCIFAR10(nn.Module):
         x = self.conv4(x)
         x = leaky_relu(self.batchnorm4(x), 0.02)
         # print(f"x shape before conv5: {x.shape}")
-        x = sigmoid(self.conv5(x), 0.02)
+        x = sigmoid(self.conv5(x))
         # print(f"x shape after conv5: {x.shape}")
         # x = self.flatten(x)
         # print(f"x shape after flatten: {x.shape}")
