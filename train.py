@@ -148,8 +148,15 @@ def train_model(
             running_sum_real_proba += classified_real_images.sum().item()
             running_sum_fake_proba_D_train += classified_generated_images.sum().item()
 
-            # print(f"classified_real_images shape: {classified_real_images.shape}")
-            # print(f"labels_real_images: {labels_real_images.shape}")
+            print(f"classified_real_images shape: {classified_real_images.shape}")
+            print(f"classified_real_images: {classified_real_images}")
+            print(f"labels_real_images shape: {labels_real_images.shape}")
+            print(f"labels_real_images: {labels_real_images}")
+
+            print(f"classified_generated_images shape: {classified_generated_images.shape}")
+            print(f"classified_generated_images: {classified_generated_images}")
+            print(f"labels_real_images shape: {labels_fake_images.shape}")
+            print(f"labels_real_images: {labels_fake_images}")
 
             # calculate loss_0
             loss_0 = criterion(classified_real_images, labels_real_images)
@@ -158,7 +165,9 @@ def train_model(
             loss_1 = criterion(classified_generated_images, labels_fake_images)
 
             # update discriminator's weights
-            loss_discriminator = (loss_0 + loss_1) / 2
+            loss_discriminator = loss_0 + loss_1
+            print(f"loss_0: {loss_0}")
+            print(f"loss_1: {loss_1}")
             optimizer_discriminator.zero_grad()
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
