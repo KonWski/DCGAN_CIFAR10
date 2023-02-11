@@ -89,9 +89,9 @@ class GeneratorCIFAR10(nn.Module):
 
         # print(f"x shape at begin: {x.shape}")
         x = self.linear1(x)
-        # x = x.view(-1, 512, 2, 2)
+        x = x.view(-1, 512, 2, 2)
         # x = x.view(-1, 1024, 2, 2)
-        x = x.view(-1, 1024, 4, 4)
+        # x = x.view(-1, 1024, 4, 4)
 
         x = self.batchnorm0(x)
         x = self.convtranspose1(x) # (256, 4, 4)
