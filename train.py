@@ -93,7 +93,7 @@ def train_model(
     discriminator = DiscriminatorCIFAR10(init_discriminator_weights_xavier).to(device)
 
     # optimizers
-    optimizer_discriminator = Adam(discriminator.parameters(), lr=0.0002)
+    optimizer_discriminator = Adam(discriminator.parameters(), lr=0.0002, betas=(0.5, 0.999))
     optimizer_generator = Adam(generator.parameters(), lr=0.0002, betas=(0.5, 0.999))
     
     # criterion
@@ -165,7 +165,6 @@ def train_model(
 
             # update discriminator's weights
             loss_discriminator = (loss_0 + loss_1) / 2
-            loss_discriminator = loss_0 + loss_1
             optimizer_discriminator.zero_grad()
             loss_discriminator.backward(retain_graph = True)
             optimizer_discriminator.step()
