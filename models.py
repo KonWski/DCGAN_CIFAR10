@@ -125,7 +125,7 @@ class DiscriminatorCIFAR10(nn.Module):
         self.batchnorm3 = BatchNorm2d(24)
         self.conv4 = Conv2d(24, 48, 4, 2) # output dim: (48, 2, 2)
         self.batchnorm4 = BatchNorm2d(48)
-        self.conv5 = Conv2d(48, 2, 2) # output dim: (1, 1, 1)
+        self.conv5 = Conv2d(48, 1, 2) # output dim: (1, 2, 1)
         self.flatten = Flatten()
 
         if inititialize_weights_xavier:
@@ -147,8 +147,8 @@ class DiscriminatorCIFAR10(nn.Module):
         x = leaky_relu(self.batchnorm4(x), 0.02)
         # print(f"x shape before conv5: {x.shape}")
         x = leaky_relu(self.conv5(x), 0.02)
-        # print(f"x shape after conv5: {x.shape}")
-        x = self.flatten(x)
+        print(f"x shape after conv5: {x.shape}")
+        # x = self.flatten(x)
         # print(f"x shape after flatten: {x.shape}")
         x = sigmoid(x)
 
