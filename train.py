@@ -128,13 +128,13 @@ def train_model(
             noise = torch.randn(real_images_size, latent_vector_length)
 
             # labels
-            # tensor_zeros = torch.full((real_images_size, 1), 0, dtype=torch.float)
-            # tensor_ones = torch.full((real_images_size, 1), 1, dtype=torch.float)
-            # labels_real_images = torch.cat((tensor_zeros, tensor_ones), dim=1).to(device)
-            # labels_fake_images = torch.cat((tensor_ones, tensor_zeros), dim=1).to(device)
+            tensor_zeros = torch.full((real_images_size, 1), 0, dtype=torch.float)
+            tensor_ones = torch.full((real_images_size, 1), 1, dtype=torch.float)
+            labels_real_images = torch.cat((tensor_zeros, tensor_ones), dim=1).to(device)
+            labels_fake_images = torch.cat((tensor_ones, tensor_zeros), dim=1).to(device)
 
-            labels_fake_images = torch.full((real_images_size, 1), 0, dtype=torch.float)
-            labels_real_images = torch.full((real_images_size, 1), 1, dtype=torch.float)
+            # labels_fake_images = torch.full((real_images_size, 1), 0, dtype=torch.float)
+            # labels_real_images = torch.full((real_images_size, 1), 1, dtype=torch.float)
 
             # zero grad
             optimizer_discriminator.zero_grad()
