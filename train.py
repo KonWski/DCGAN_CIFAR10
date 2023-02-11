@@ -128,8 +128,8 @@ def train_model(
             noise = torch.randn(batch_size, latent_vector_length)
 
             # labels
-            labels_fake_images = torch.ones(batch_size)
-            labels_real_images = torch.zeros(batch_size)
+            labels_real_images = torch.ones(batch_size)
+            labels_fake_images = torch.zeros(batch_size)
 
             # send tensors to device
             real_images = real_images.to(device)
