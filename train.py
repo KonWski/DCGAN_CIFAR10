@@ -171,7 +171,7 @@ def train_model(
             loss_1 = criterion(classified_generated_images, noisy_labels_fake_images)
 
             # update discriminator's weights
-            loss_discriminator = loss_0 + loss_1
+            loss_discriminator = (loss_0 + loss_1) / 2
             # print(f"loss_0: {loss_0}")
             # print(f"loss_1: {loss_1}")
             optimizer_discriminator.zero_grad()
