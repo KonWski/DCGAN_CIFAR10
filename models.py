@@ -134,7 +134,7 @@ class DiscriminatorCIFAR10(nn.Module):
         x = sigmoid(self.conv5(x))
         # print(f"x shape after conv5: {x.shape}")
         # x = self.flatten(x)
-        print(f"x shape after sigmoid: {x.shape}")
+        # print(f"x shape after sigmoid: {x.shape}")
 
         return x
 
