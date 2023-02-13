@@ -91,15 +91,27 @@ class DiscriminatorCIFAR10(nn.Module):
     '''
     def __init__(self, inititialize_weights_xavier: bool = False):
         super().__init__()
-        self.conv1 = Conv2d(3, 6, 3) # output dim: (3, 30, 30)
-        self.batchnorm1 = BatchNorm2d(6)
-        self.conv2 = Conv2d(6, 12, 4, 2) # output dim: (12, 14, 14)
-        self.batchnorm2 = BatchNorm2d(12)
-        self.conv3 = Conv2d(12, 24, 4, 2) # output dim: (24, 6, 6)
-        self.batchnorm3 = BatchNorm2d(24)
-        self.conv4 = Conv2d(24, 48, 4, 2) # output dim: (48, 2, 2)
-        self.batchnorm4 = BatchNorm2d(48)
-        self.conv5 = Conv2d(48, 1, 2) # output dim: (1, 2, 1)
+        # self.conv1 = Conv2d(3, 6, 3) # output dim: (3, 30, 30)
+        # self.batchnorm1 = BatchNorm2d(6)
+        # self.conv2 = Conv2d(6, 12, 4, 2) # output dim: (12, 14, 14)
+        # self.batchnorm2 = BatchNorm2d(12)
+        # self.conv3 = Conv2d(12, 24, 4, 2) # output dim: (24, 6, 6)
+        # self.batchnorm3 = BatchNorm2d(24)
+        # self.conv4 = Conv2d(24, 48, 4, 2) # output dim: (48, 2, 2)
+        # self.batchnorm4 = BatchNorm2d(48)
+        # self.conv5 = Conv2d(48, 1, 2) # output dim: (1, 2, 1)
+        # self.flatten = Flatten()
+
+
+        self.conv1 = Conv2d(3, 128, 4, 1, bias=False) # output dim: (3, 30, 30)
+        # self.batchnorm1 = BatchNorm2d(128)
+        self.conv2 = Conv2d(128, 256, 5, 2, bias=False) # output dim: (12, 14, 14)
+        self.batchnorm2 = BatchNorm2d(256)
+        self.conv3 = Conv2d(256, 512, 5, 1, bias=False) # output dim: (24, 6, 6)
+        self.batchnorm3 = BatchNorm2d(512)
+        self.conv4 = Conv2d(512, 1024, 5, 1, bias=False) # output dim: (48, 2, 2)
+        self.batchnorm4 = BatchNorm2d(1024)        
+        self.conv5 = Conv2d(1024, 1, 5, 1, bias=False) # output dim: (1, 2, 1)
         self.flatten = Flatten()
 
         if inititialize_weights_xavier:
@@ -122,7 +134,7 @@ class DiscriminatorCIFAR10(nn.Module):
         x = sigmoid(self.conv5(x))
         # print(f"x shape after conv5: {x.shape}")
         # x = self.flatten(x)
-        # print(f"x shape after flatten: {x.shape}")
+        print(f"x shape after sigmoid: {x.shape}")
 
         return x
 
