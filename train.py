@@ -104,7 +104,7 @@ def train_model(
     lowest_epoch_loss_generator = float("inf")
 
     # example reference img
-    ref_noise = torch.randn(1, latent_vector_length)
+    ref_noise = torch.randn(1, latent_vector_length, 1, 1)
     ref_noise = ref_noise.to(device)
 
     for epoch in range(n_epochs):
@@ -126,7 +126,7 @@ def train_model(
             real_images = batch[0]
             batch_size = real_images.shape[0]
 
-            noise = torch.randn(batch_size, latent_vector_length)
+            noise = torch.randn(batch_size, latent_vector_length, 1, 1)
 
             # labels
             labels_real_images = torch.ones(batch_size)
