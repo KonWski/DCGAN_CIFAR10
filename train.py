@@ -79,6 +79,7 @@ def train_model(
     
     transform_cifar = transforms.Compose([
         transforms.ToTensor(),
+        transforms.RandomHorizontalFlip(p=0.5),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
