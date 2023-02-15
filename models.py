@@ -31,20 +31,14 @@ class GeneratorCIFAR10(nn.Module):
         # self.convtranspose5 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=4, stride=1, bias=False) # out (3, 32, 32)
         # self.batchnorm5 = BatchNorm2d(3)
 
-
         self.latent_vector_length = latent_vector_length
-        self.convtranspose1 = ConvTranspose2d(in_channels=latent_vector_length, out_channels=1024, kernel_size=6, stride=1, bias=False) # out (512, 6, 6)
-        self.batchnorm1 = BatchNorm2d(1024)
-        self.convtranspose2 = ConvTranspose2d(in_channels=1024, out_channels=512, kernel_size=7, stride=1, bias=False) # out (512, 12, 12)
-        self.batchnorm2 = BatchNorm2d(512)
-        self.convtranspose3 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=6, stride=1, bias=False) # out (256, 17, 17)
-        self.batchnorm3 = BatchNorm2d(256)
-        self.convtranspose4 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=6, stride=1, bias=False) # out (128, 22, 22)
-        self.batchnorm4 = BatchNorm2d(128)
-        self.convtranspose5 = ConvTranspose2d(in_channels=128, out_channels=64, kernel_size=6, stride=1, bias=False) # out (128, 27, 27)
-        self.batchnorm5 = BatchNorm2d(64)
-        self.convtranspose6 = ConvTranspose2d(in_channels=64, out_channels=3, kernel_size=6, stride=1, bias=False) # out (3, 32, 32)
-        self.batchnorm6 = BatchNorm2d(3)
+        self.convtranspose1 = ConvTranspose2d(in_channels=latent_vector_length, out_channels=512, kernel_size=5, stride=2, bias=False) # out (512, 5, 5)
+        self.batchnorm1 = BatchNorm2d(512)
+        self.convtranspose2 = ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=5, stride=2, bias=False) # out (512, 13, 13)
+        self.batchnorm2 = BatchNorm2d(256)
+        self.convtranspose3 = ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=5, stride=2, bias=False) # out (256, 29, 29)
+        self.batchnorm3 = BatchNorm2d(128)
+        self.convtranspose4 = ConvTranspose2d(in_channels=128, out_channels=3, kernel_size=4, stride=1, bias=False) # out (128, 32, 32)
 
 
         if inititialize_weights_xavier:
@@ -72,13 +66,7 @@ class GeneratorCIFAR10(nn.Module):
         x = self.convtranspose3(x)
         x = relu(self.batchnorm3(x))
         x = self.convtranspose4(x)
-        x = relu(self.batchnorm4(x))
-        x = self.convtranspose5(x)
-        x = relu(self.batchnorm5(x))
-        x = self.convtranspose6(x)
         x = tanh(x)
-
-
 
         # print(f"x shape at end: {x.shape}")
         
@@ -106,17 +94,12 @@ class DiscriminatorCIFAR10(nn.Module):
         # self.conv5 = Conv2d(1024, 1, 5, 1, bias=False) # output dim: (1, 2, 1)
         # self.flatten = Flatten()
 
-        self.conv1 = Conv2d(3, 64, 6, 1, bias=False) # output dim: (3, 30, 30)
-        # self.batchnorm1 = BatchNorm2d(128)
-        self.conv2 = Conv2d(64, 128, 6, 1, bias=False) # output dim: (12, 14, 14)
-        self.batchnorm2 = BatchNorm2d(128)
-        self.conv3 = Conv2d(128, 256, 6, 1, bias=False) # output dim: (24, 6, 6)
-        self.batchnorm3 = BatchNorm2d(256)
-        self.conv4 = Conv2d(256, 512, 6, 1, bias=False) # output dim: (24, 6, 6)
-        self.batchnorm4 = BatchNorm2d(512)
-        self.conv5 = Conv2d(512, 1024, 7, 1, bias=False) # output dim: (48, 2, 2)
-        self.batchnorm5 = BatchNorm2d(1024)        
-        self.conv6 = Conv2d(1024, 1, 6, 1, bias=False) # output dim: (1, 2, 1)
+        self.conv1 = Conv2d(3, 128, 4, 1, bias=False) # output dim: (3, 30, 30)
+        self.conv2 = Conv2d(128, 256, 5, 2, bias=False) # output dim: (12, 14, 14)
+        self.batchnorm2 = BatchNorm2d(256)
+        self.conv3 = Conv2d(256, 512, 5, 2, bias=False) # output dim: (24, 6, 6)
+        self.batchnorm3 = BatchNorm2d(512)
+        self.conv4 = Conv2d(512, 1, 5, 2, bias=False) # output dim: (24, 6, 6)
         self.flatten = Flatten()
 
         if inititialize_weights_xavier:
@@ -132,14 +115,8 @@ class DiscriminatorCIFAR10(nn.Module):
         # print(f"x shape before conv3: {x.shape}")
         x = self.conv3(x)
         x = leaky_relu(self.batchnorm3(x), 0.02)
-        # print(f"x shape before conv4: {x.shape}")
-        x = self.conv4(x)
-        x = leaky_relu(self.batchnorm4(x), 0.02)
-        x = self.conv5(x)
-        x = leaky_relu(self.batchnorm5(x), 0.02)
-
         # print(f"x shape before conv5: {x.shape}")
-        x = sigmoid(self.conv6(x))
+        x = sigmoid(self.conv4(x))
         # print(f"x shape after conv5: {x.shape}")
         # x = self.flatten(x)
         # print(f"x shape after sigmoid: {x.shape}")
