@@ -8,19 +8,19 @@ def get_args():
     parser = argparse.ArgumentParser(description='Paramaters for model training')
     parser.add_argument('--n_epochs', type=int, help='Number of epochs')
     parser.add_argument('--batch_size', type=int, help='Number of images in batch')
-    parser.add_argument('--checkpoints_dir', type=str, help='Path to directory where checkpoint will be saved')
+    parser.add_argument('--ref_images_dir', type=str, help='Path to directory where ref images will be saved')
     parser.add_argument('--download_datasets', type=str, help='Download dataset from Torchvision repo or use already existing dataset')
     parser.add_argument('--root_datasets_dir', type=str, help='Path where dataset should be downloaded or where is it already stored')
     parser.add_argument('--class_name', type=str, help='One of ten classes in CIFAR10 dataset')
     parser.add_argument('--latent_vector_length', type=int, help='Length of random vector which will be transformed into an image by generator')
-    parser.add_argument('--init_generator_weights_xavier', type=str, help="Init generator's weights using Xavier's initialization")
-    parser.add_argument('--init_discriminator_weights_xavier', type=str, help="Init discriminator's weights using Xavier's initialization")
+    parser.add_argument('--init_generator_weights', type=str, help="Init generator's weights using normal distribiution")
+    parser.add_argument('--init_discriminator_weights', type=str, help="Init discriminator's weights using normal distribiution")
 
     args = vars(parser.parse_args())
     
     # parse str to boolean
     str_true = ["Y", "y", "Yes", "yes", "true", "True"]
-    bool_params = ["download_datasets", "init_generator_weights_xavier", "init_discriminator_weights_xavier"]
+    bool_params = ["download_datasets", "init_generator_weights", "init_discriminator_weights"]
     for param in bool_params:
         if args[param] in str_true:
             args[param] = True
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     logging.info(f"Device: {device}")
 
-    model = train_model(device, args["n_epochs"], args["batch_size"], args["checkpoints_dir"], 
+    model = train_model(device, args["n_epochs"], args["batch_size"], args["ref_images_dir"], 
                         args["download_datasets"], args["root_datasets_dir"], args["class_name"],
-                        args["latent_vector_length"], args["init_generator_weights_xavier"],
-                        args["init_discriminator_weights_xavier"])
+                        args["latent_vector_length"], args["init_generator_weights"],
+                        args["init_discriminator_weights"])
