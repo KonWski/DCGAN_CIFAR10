@@ -19,7 +19,7 @@ $p_{data}(\mathbf{x})$ - distribution of original dataset;
 $p_{\mathbf{z}}(\mathbf{z})$ -  distribution on input noise variables.
 
 Authors of [Generative Adversial Nets](https://arxiv.org/abs/1406.2661) mention that the above equation should not be used in a direct way - on early phase of learning when $G$ generates observations obviously different from the training set, $D$ can classify them faultlessly as product of $G$. That could end up with saturation of $log(1 - D(G(\mathbf{z}))$ which indicates that a better way to train $G$ is to maximize $D(G(\mathbf{z}))$.
- 
+
 # DCGAN
 The idea of building more complex GAN based models came with [Unsupervised representation learning with deep convolutional generative adversarial networks](https://arxiv.org/pdf/1511.06434.pdf) written by Alec Redford et al. Authors proposed a new architecture which takes advantage of transposed convolutions layers in generator and standard convolutional layers in discriminator.
 
@@ -27,6 +27,8 @@ The clue of the publication is to reflect in discriminator's structure layers us
 
 # Example training processes
 Below gifs present generated images using constant reference random vector across all epochs:
+
+![dogs.gif](/gifs/dogs.gif)
 
 
 # How to work with project
