@@ -1,5 +1,5 @@
-# GAN_CIFAR
-Following repository presents an implementation of Generative Adversial Network (GAN) written in PyTorch. Data used for model training comes from CIFAR10 dataset available through Torchvision.
+# DCGAN_CIFAR
+Following repository presents an example implementation of Deep Convolutional Generative Adversial Net (DCGAN). Architecture used for building model is slightly different that the one used in [official paper](https://arxiv.org/pdf/1511.06434.pdf) yet its final form is clearly inspired by Alec Redford et al's idea. publication. Data used for model training comes from CIFAR10 dataset available through Torchvision.
 
 # GAN
 GAN's conception was primarly published in [Generative Adversial Nets](https://arxiv.org/abs/1406.2661) paper written by Ian J. Godefellow et al. 
@@ -19,3 +19,38 @@ $p_{data}(\mathbf{x})$ - distribution of original dataset;
 $p_{\mathbf{z}}(\mathbf{z})$ -  distribution on input noise variables.
 
 Authors of [Generative Adversial Nets](https://arxiv.org/abs/1406.2661) mention that the above equation should not be used in a direct way - on early phase of learning when $G$ generates observations obviously different from the training set, $D$ can classify them faultlessly as product of $G$. That could end up with saturation of $log(1 - D(G(\mathbf{z}))$ which indicates that a better way to train $G$ is to maximize $D(G(\mathbf{z}))$.
+
+# DCGAN
+The idea of building more complex GAN based models came with [Unsupervised representation learning with deep convolutional generative adversarial networks](https://arxiv.org/pdf/1511.06434.pdf) written by Alec Redford et al. Authors proposed a new architecture which takes advantage of transposed convolutions layers in generator and standard convolutional layers in discriminator.
+
+The clue of the publication is to reflect in discriminator's structure layers used in generator but in a reversed way. For example parameters (padding, stride and kernel size) of first transposed convolution layer in generator should match equivalent parameters of last convolutional layer in discriminator. In this way the training process is stabilized to some extend.
+
+# Example training processes
+Below gifs present generated images using constant reference random vector across all epochs:
+
+
+# How to work with project
+
+## Training a model
+```
+!python /path/to/main.py --n_epochs 300 \
+                         --batch_size 32 \
+                         --ref_images_dir 'path/to/directory/for/images'\
+                         --download_datasets 'true'\
+                         --root_datasets_dir 'CIFAR10_dataset' \
+                         --class_name 'cat' \
+                         --latent_vector_length 100 \
+                         --init_generator_weights 'true' \
+                         --init_discriminator_weights 'true'
+```
+
+Args used in command:
+- n_epochs - number of epochs
+- batch_size - number of images in batch
+- ref_images_dir - path to directory where referance images will be saved
+- download_datasets - download dataset from Torchvision repo or use already existing dataset
+- root_datasets_dir - path where dataset should be downloaded or where is it already stored
+- class_name - name of one of 10 available in CIFAR10 classes
+- latent_vector_length - length of random vector which will be transformed into an image by generator
+- init_generator_weights - init generator's weights using normal distribiution
+- init_discriminator_weights - init discriminator's weights using normal distribiution
