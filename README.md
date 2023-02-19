@@ -26,9 +26,9 @@ The idea of building more complex GAN based models came with [Unsupervised repre
 The clue of the publication is to reflect in discriminator's structure layers used in generator but in a reversed way. For example parameters (padding, stride and kernel size) of first transposed convolution layer in generator should match equivalent parameters of last convolutional layer in discriminator. In this way the training process is stabilized to some extend.
 
 # Example training processes
-Below gifs present generated images using constant reference random vector across all epochs:
+Below gifs present generated images (dogs/frogs/ships) using constant reference random vector across all epochs:
 
-![dogs.gif](/gifs/dogs.gif)
+![dogs.gif](/gifs/dogs.gif) ![frogs.gif](/gifs/frogs.gif) ![ships.gif](/gifs/ships.gif)
 
 
 # How to work with project
